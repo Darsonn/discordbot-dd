@@ -7,6 +7,7 @@ public class Config {
     private String welcomeChannelID;
     private String defaultMemberRoleID;
     private String ticketSystemCategoryID;
+    private String ticketChannelID;
 
     public String getServerName() {
         return this.serverName;
@@ -29,4 +30,8 @@ public class Config {
     public String getTicketSystemCategoryID() {
         return this.ticketSystemCategoryID;
     }
+    public String getTicketChannelID() {
+        return this.ticketChannelID;
+    }
+
 }

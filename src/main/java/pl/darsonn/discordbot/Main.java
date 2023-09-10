@@ -13,7 +13,8 @@ import java.io.InputStream;
 import java.util.EnumSet;
 
 public class Main {
-    public static String serverName, rulesLink, welcomeChannelID, defaultMemberRoleID, logoURL, ticketSystemCategoryID;
+    public static String serverName, rulesLink, welcomeChannelID, defaultMemberRoleID, logoURL, ticketSystemCategoryID,
+            ticketChannelID;
 
     public static void main(String[] args) {
         loadConfig();
@@ -40,6 +41,7 @@ public class Main {
             welcomeChannelID = config.getWelcomeChannelID();
             defaultMemberRoleID = config.getDefaultMemberRoleID();
             ticketSystemCategoryID = config.getTicketSystemCategoryID();
+            ticketChannelID= config.getTicketChannelID();
         } catch (IOException e) {
             System.out.println("Plik konfiguracyjny nie istnieje lub źle został zdefiniowany.");
             throw new RuntimeException(e);
