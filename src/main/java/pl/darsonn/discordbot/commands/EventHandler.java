@@ -19,9 +19,6 @@ public class EventHandler extends ListenerAdapter {
     EmbedMessageGenerator embedMessageGenerator = new EmbedMessageGenerator();
     TicketSystemListener ticketSystemListener = new TicketSystemListener();
 
-    String[] setupOptions = new String[]{"rules", "ticketsystem", "shopinfo"};
-
-
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         Member member = event.getMember();
