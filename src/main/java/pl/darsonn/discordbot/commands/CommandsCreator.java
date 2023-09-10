@@ -1,11 +1,13 @@
 package pl.darsonn.discordbot.commands;
 
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 import static net.dv8tion.jda.api.interactions.commands.OptionType.BOOLEAN;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class CommandsCreator {
     public void createCommands(JDA builder) {
@@ -42,6 +44,13 @@ public class CommandsCreator {
                 Commands.slash("sendlinkmessage", "Wysyła wiadomość z przydatnymi linkami")
                         .setGuildOnly(true)
                         .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
+        );
+
+        commands.addCommands(
+                Commands.slash("purge", "Usuwa określoną ilość wiadomości")
+                        .addOption(INTEGER, "amount", "How many messages to prune (Default 100)")
+                        .setGuildOnly(true)
+                        .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE))
         );
 
         commands.queue();
