@@ -2,10 +2,8 @@ package pl.darsonn.discordbot.ticketsystem;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -42,7 +40,7 @@ public class TicketSystemListener extends ListenerAdapter {
                 String channelID = channel.getId();
                 TextChannel ticket = event.getJDA().getTextChannelById(channelID);
                 ticketLogs.createTicket(event.getMember(), channelID);
-                embedMessageGenerator.sendPanelInTicket(ticket, event.getMember());
+                embedMessageGenerator.sendPanelInTicket(ticket, event.getMember(), "apply"+option);
                 event.reply("Utworzono ticket " + channel.getAsMention()).setEphemeral(true).queue();
             });
         } else {
@@ -59,7 +57,7 @@ public class TicketSystemListener extends ListenerAdapter {
             channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null);
             channelAction.queue(channel -> {
                 String channelID = channel.getId();
-                sendPanelInTicket(event, channelID);
+                sendPanelInTicket(event, channelID, "shop");
                 event.reply("Utworzono ticket " + channel.getAsMention()).setEphemeral(true).queue();
             });
         } else {
@@ -76,7 +74,7 @@ public class TicketSystemListener extends ListenerAdapter {
             channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null);
             channelAction.queue(channel -> {
                 String channelID = channel.getId();
-                sendPanelInTicket(event, channelID);
+                sendPanelInTicket(event, channelID, "ticket");
                 event.reply("Utworzono ticket " + channel.getAsMention()).setEphemeral(true).queue();
             });
         } else {
@@ -84,10 +82,10 @@ public class TicketSystemListener extends ListenerAdapter {
         }
     }
 
-    public void sendPanelInTicket(ButtonInteractionEvent event, String channelID) {
+    public void sendPanelInTicket(ButtonInteractionEvent event, String channelID, String ticketType) {
         TextChannel ticket = event.getJDA().getTextChannelById(channelID);
         ticketLogs.createTicket(event.getMember(), channelID);
-        embedMessageGenerator.sendPanelInTicket(ticket, event.getMember());
+        embedMessageGenerator.sendPanelInTicket(ticket, event.getMember(), ticketType);
     }
 
     public void closeTicket(ButtonInteractionEvent event) {

@@ -61,18 +61,51 @@ public class EmbedMessageGenerator {
                         StringSelectMenu.create("applyoption")
                                 .addOption("Administrator", "adm", "Aplikuj na stanowisko administratora")
                                 .addOption("Developer", "dev", "Aplikuj na stanowisko developera")
-                                .addOption("Creator", "creator", "Aplikuj na stanowisko twórcy")
+                                //.addOption("Creator", "creator", "Aplikuj na stanowisko twórcy")
                                 .build())
                 .setEphemeral(true)
                 .queue();
     }
 
-    public void sendPanelInTicket(TextChannel ticket, Member member) {
+    public void sendPanelInTicket(TextChannel ticket, Member member, String ticketType) {
         embedBuilder.clear();
 
         embedBuilder.setTitle(Main.serverName + " Ticket Support");
-        embedBuilder.setDescription("Thank you for contacting support.\n" +
-                "Please describe your issue and wait for a response.");
+        embedBuilder.setColor(Color.YELLOW);
+
+        switch (ticketType) {
+            case "ticket":
+                embedBuilder.setDescription("Dziękujemy za kontakt z "+ Main.serverName +" Support.\n" +
+                        "Proszę opisać swój problem i czekać na odpowiedź z naszej strony.");
+                break;
+            case "shop":
+                embedBuilder.addField("Chcesz zakupić skrypt/usługę nie wymieniony w <#1150210897256665129>?",
+                        "- Proszę opisać jakie funkcjonalności powinien zawierać ten skrypt" +
+                                "\n- Na jaki framework skrypt ma zostać napisany" +
+                                "\n- Inne dodatkowe informacje", true);
+                embedBuilder.addField("Chcesz kupić jeden ze skryptów z <#1150210897256665129>?",
+                        "- Proszę podać skrypt/usługę, którą chcesz zakupić" +
+                                "\n- Czy będziesz potrzebował edycji/dostosowania owego skryptu pod swój serwer?", true);
+                embedBuilder.addField("Problem ze skryptem/usługą",
+                        "Opisz problem jaki występuje", true);
+                break;
+            case "applyadm":
+                embedBuilder.addField("Podanie na administratora jest dostępne na naszej stronie internetowej pod linkiem:",
+                        "[Podanie - " + Main.serverName + "](https://dev.darsonn.pl/#adm)", true);
+                break;
+            case "applydev":
+                embedBuilder.addField("Niezbędne informacje jakie powinieneś zawrzeć",
+                        "- Imię" +
+                                "\n- Wiek" +
+                                "\n- Doświadczenie" +
+                                "\n- Portfolio" +
+                                "\n- Umiejętności" +
+                                "\n\nPo napisaniu podania zadamy kilka pytań uzupełniających.", true);
+                break;
+            case "applycreator":
+                embedBuilder.setDescription("Creator is closed position!");
+        }
+
         embedBuilder.setFooter("Created at " + dtf.format(time));
 
         ticket.sendMessage("||<@"+ member.getId()+">||").queue();
