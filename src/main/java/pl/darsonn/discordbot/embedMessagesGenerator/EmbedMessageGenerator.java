@@ -160,12 +160,12 @@ public class EmbedMessageGenerator {
 
         embedBuilder.addBlankField(false);
 
-        embedBuilder.addField("Znalazłeś skrypt, którego szukasz?", "Utwórz ticket na kanale <#1145139398204215406> i poinformuj nas, że chcesz kupić dostęp do niego.\n" +
+        embedBuilder.addField("Znalazłeś skrypt, którego szukasz?", "Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i poinformuj nas, że chcesz kupić dostęp do niego.\n" +
                 "Po dogadaniu się z płatnością dostaniesz dostęp do prywatnego repozytorium na GitHubie, gdzie będziesz mógł go pobrać" +
                 "i będziesz na bieżąco z aktualizacjami", true);
 
         embedBuilder.addField("Nie ma w sklepie tego czego szukasz?",
-                "To nie problem! Utwórz ticket na kanale <#1145139398204215406> i napisz czego oczekujesz od skryptu, a my zajmiemy się resztą.", true);
+                "To nie problem! Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i napisz czego oczekujesz od skryptu, a my zajmiemy się resztą.", true);
 
         embedBuilder.addBlankField(false);
 
@@ -173,7 +173,7 @@ public class EmbedMessageGenerator {
                 "To również nie problem! Posiadamy rozbudowaną sekcję poradników, gdzie na kanale <#1145107437414789160>" +
                         " znajdziesz dokładny poradnik jak wgrać skrypt krok po kroku. \n" +
                         "Jeżeli natomiast będziesz miał jakiś problem pomocy uzyskasz na kanale <#1150189231994589264>." +
-                        " W ostateczności możesz również utworzyć ticket na kanale <#1145139398204215406>, a **" + Main.serverName +
+                        " W ostateczności możesz również utworzyć ticket na kanale <#" + Main.ticketChannelID + ">, a **" + Main.serverName +
                         " Staff** pomoże Ci w rozwiązaniu tego problemu.", true);
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
