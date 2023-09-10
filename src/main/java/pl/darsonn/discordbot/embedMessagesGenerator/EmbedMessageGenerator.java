@@ -206,4 +206,20 @@ public class EmbedMessageGenerator {
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
+
+    public void sendLinksEmbedMessage(SlashCommandInteractionEvent event) {
+        TextChannel textChannel = event.getChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle("Linki do narzędzi potrzebnych w tej kategorii");
+        embedBuilder.setColor(Color.YELLOW);
+        embedBuilder.addField("Programowanie", "- [Visual Studio Code](https://code.visualstudio.com)", true);
+        embedBuilder.addField("Edycja plików pojazdów itd.", "- [OpenIV](https://openiv.com)", true);
+        embedBuilder.addField("Grafika",
+                "- [GIMP](https://www.gimp.org/) (darmowa opcja)" +
+                        "\n- [Photoshop](https://www.adobe.com/pl/products/photoshop.html) (płatna opcja)", true);
+
+        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
 }
