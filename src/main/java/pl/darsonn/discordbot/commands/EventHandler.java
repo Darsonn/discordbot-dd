@@ -38,6 +38,7 @@ public class EventHandler extends ListenerAdapter {
             case "setupticket" -> setupTicketCommand(event);
             case "sendshopinfo" -> sendShopInfoCommand(event);
             case "sendstatusroles" -> sendStatusRolesCommand(event);
+            case "sendlinkmessage" -> sendLinksMessageCommand(event);
             //case "editstatusofapplication" ->
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
@@ -79,5 +80,10 @@ public class EventHandler extends ListenerAdapter {
         event.reply("Message with roles status sent!").setEphemeral(true).queue();
         embedMessageGenerator.sendStatusRolesEmbedMessage(event, event.getOption("administrator").getAsBoolean(),
                 event.getOption("developer").getAsBoolean(), event.getOption("creator").getAsBoolean());
+    }
+
+    private void sendLinksMessageCommand(SlashCommandInteractionEvent event) {
+        event.reply("Message with links sent!").setEphemeral(true).queue();
+        embedMessageGenerator.sendLinksEmbedMessage(event);
     }
 }
