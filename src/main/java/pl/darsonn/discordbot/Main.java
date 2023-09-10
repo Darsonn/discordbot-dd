@@ -41,6 +41,7 @@ public class Main {
             defaultMemberRoleID = config.getDefaultMemberRoleID();
             ticketSystemCategoryID = config.getTicketSystemCategoryID();
         } catch (IOException e) {
+            System.out.println("Plik konfiguracyjny nie istnieje lub źle został zdefiniowany.");
             throw new RuntimeException(e);
         }
     }

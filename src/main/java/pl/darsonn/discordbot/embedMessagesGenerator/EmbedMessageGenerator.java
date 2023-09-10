@@ -145,4 +145,24 @@ public class EmbedMessageGenerator {
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
+
+    public void sendStatusRolesEmbedMessage(SlashCommandInteractionEvent event, boolean isAdm, boolean isDev, boolean isCreator) {
+        TextChannel textChannel = event.getChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.serverName + " - statusy rekrutacji");
+        embedBuilder.setColor(Color.YELLOW);
+
+        String wynik = isAdm ? ":white_check_mark: Otwarta" : ":x: Zamknięta";
+        embedBuilder.addField("Administrator", wynik, true);
+
+        wynik = isDev ? ":white_check_mark: Otwarta" : ":x: Zamknięta";
+        embedBuilder.addField("Developer", wynik, true);
+
+        wynik = isCreator ? ":white_check_mark: Otwarta" : ":x: Zamknięta";
+        embedBuilder.addField("Twórca", wynik, true);
+
+        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
 }
