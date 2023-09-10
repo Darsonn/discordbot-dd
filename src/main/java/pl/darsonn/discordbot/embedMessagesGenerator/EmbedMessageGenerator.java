@@ -154,6 +154,8 @@ public class EmbedMessageGenerator {
         embedBuilder.setTitle(Main.serverName + " - statusy rekrutacji");
         embedBuilder.setColor(Color.YELLOW);
 
+        embedBuilder.addBlankField(false);
+
         String wynik = isAdm ? ":white_check_mark: Otwarta" : ":x: Zamknięta";
         embedBuilder.addField("Administrator", wynik, true);
 
@@ -162,6 +164,12 @@ public class EmbedMessageGenerator {
 
         wynik = isCreator ? ":white_check_mark: Otwarta" : ":x: Zamknięta";
         embedBuilder.addField("Twórca", wynik, true);
+
+        embedBuilder.addBlankField(false);
+
+        embedBuilder.addField("Proces aplikacji", "Aby zaaplikować należy utworzyć odpowiedni ticket na kanale " +
+                "<#1145139398204215406>, dalej zostanie przedstawiony cały proces rekrutacyjny w zależności " +
+                "od aplikowanego stanowiska", true);
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
