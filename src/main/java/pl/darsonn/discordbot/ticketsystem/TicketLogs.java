@@ -2,7 +2,6 @@ package pl.darsonn.discordbot.ticketsystem;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
 
 public class TicketLogs {
