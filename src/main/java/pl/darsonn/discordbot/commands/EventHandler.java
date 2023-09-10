@@ -1,11 +1,13 @@
 package pl.darsonn.discordbot.commands;
 
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import pl.darsonn.discordbot.Main;
 import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
@@ -39,6 +41,7 @@ public class EventHandler extends ListenerAdapter {
             case "sendshopinfo" -> sendShopInfoCommand(event);
             case "sendstatusroles" -> sendStatusRolesCommand(event);
             case "sendlinkmessage" -> sendLinksMessageCommand(event);
+            case "purge" -> purgeCommand(event);
             //case "editstatusofapplication" ->
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
@@ -50,8 +53,28 @@ public class EventHandler extends ListenerAdapter {
 
         if(Objects.requireNonNull(component.getId()).endsWith("-ticket")) {
             ticketSystemListener.interactionListener(event, component);
+        } else {
+            String[] id = event.getComponentId().split(":");
+            String authorId = id[0];
+            String type = id[1];
+
+            if (!authorId.equals(event.getUser().getId()))
+                return;
+            event.deferEdit().queue();
+
+            MessageChannel channel = event.getChannel();
+            switch (type)
+            {
+                case "prune":
+                    int amount = Integer.parseInt(id[2]);
+                    event.getChannel().getIterableHistory()
+                            .skipTo(event.getMessageIdLong())
+                            .takeAsync(amount)
+                            .thenAccept(channel::purgeMessages);
+                case "delete":
+                    event.getHook().deleteOriginal().queue();
+            }
         }
-//        switch(component) {} // inne interakcje niż ticket system
     }
 
     @Override
@@ -85,5 +108,18 @@ public class EventHandler extends ListenerAdapter {
     private void sendLinksMessageCommand(SlashCommandInteractionEvent event) {
         event.reply("Message with links sent!").setEphemeral(true).queue();
         embedMessageGenerator.sendLinksEmbedMessage(event);
+    }
+
+    private void purgeCommand(SlashCommandInteractionEvent event) {
+        OptionMapping amountOption = event.getOption("amount");
+        int amount = amountOption == null
+                ? 100 // default 100
+                : (int) Math.min(200, Math.max(2, amountOption.getAsLong()));
+        String userId = event.getUser().getId();
+        event.reply("To usunie " + amount + " wiadomości.\nJesteś pewny?")
+                .addActionRow(
+                        Button.secondary(userId + ":delete", "Rezygnuję"),
+                        Button.danger(userId + ":prune:" + amount, "Tak"))
+                .queue();
     }
 }
