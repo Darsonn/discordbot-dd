@@ -1,0 +1,148 @@
+package pl.darsonn.discordbot.embedMessagesGenerator;
+
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
+import pl.darsonn.discordbot.Main;
+
+import java.awt.*;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+public class EmbedMessageGenerator {
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
+    LocalDateTime time = LocalDateTime.now();
+    EmbedBuilder embedBuilder = new EmbedBuilder();
+
+    public void sendRulesEmbedMessage(SlashCommandInteractionEvent event) {
+        TextChannel textChannel = event.getGuildChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.serverName);
+        embedBuilder.setColor(Color.YELLOW);
+
+        embedBuilder.addField("Regulamin jest dostępny na naszej stronie internetowej\n",
+                "[Rules - " + Main.serverName + "](" + Main.rulesLink + ")", false);
+
+        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
+
+    public void sendTicketPanelEmbedMessage(SlashCommandInteractionEvent event) {
+        TextChannel textChannel = event.getGuildChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.serverName + " Ticket Support");
+        embedBuilder.setColor(Color.YELLOW);
+
+        embedBuilder.addField("Przed utworzeniem ticketa!",
+                "Upewnij się, że przeczytałeś takie kanały jak: <#1150210897256665129>, <#1118929071997460650> oraz <#1145107437414789160>." +
+                        "\n\nW przypadku utworzenia ticketa bez powodu będą wyciągane z tego tytułu konsekwencje." +
+                        "\n\nWybierz rodzaj sprawy przez którą chcesz utworzyć ticket", true);
+
+        textChannel.sendMessageEmbeds(embedBuilder.build())
+                .addActionRow(
+                        Button.primary("main-open-ticket", "Problem ogólny"),
+                        Button.success("shop-open-ticket", "Zamówienie/problem ze sklepem"),
+                        Button.danger("apply-open-ticket", "Aplikuj do " + Main.serverName + " Staff")
+                )
+                .queue();
+    }
+
+    public void sendApplyOptionsMenu(ButtonInteractionEvent event, Member member) {
+        event.reply("Wybierz stanowisko na jakie chcesz aplikować")
+                .addActionRow(
+                        StringSelectMenu.create("applyoption")
+                                .addOption("Administrator", "adm", "Aplikuj na stanowisko administratora")
+                                .addOption("Developer", "dev", "Aplikuj na stanowisko developera")
+                                .addOption("Creator", "creator", "Aplikuj na stanowisko twórcy")
+                                .build())
+                .setEphemeral(true)
+                .queue();
+    }
+
+    public void sendPanelInTicket(TextChannel ticket, Member member) {
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.serverName + " Ticket Support");
+        embedBuilder.setDescription("Thank you for contacting support.\n" +
+                "Please describe your issue and wait for a response.");
+        embedBuilder.setFooter("Created at " + dtf.format(time));
+
+        ticket.sendMessage("||<@"+ member.getId()+">||").queue();
+        ticket.sendMessageEmbeds(embedBuilder.build())
+                .addActionRow(
+                        Button.danger("close-ticket", "Zamknij ticket")
+                )
+                .queue();
+    }
+
+    public void sendPanelStaffAfterClosingTicket(TextChannel ticket, Member member) {
+        ticket.sendMessage("Ticket closed by <@"+ member.getId()+">").queue();
+
+        embedBuilder.clear();
+        embedBuilder.setTitle(Main.serverName + " Staff Ticket Panel");
+        embedBuilder.setColor(Color.RED);
+
+        ticket.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
+
+    public void sendInformationAboutCreationNewTicket(TextChannel ticket, Member member, String channelID) {
+        embedBuilder.clear();
+
+        embedBuilder.setTitle("Ticket created");
+        embedBuilder.setColor(Color.GREEN);
+        embedBuilder.setDescription("Created by " + member.getEffectiveName() + " at " + dtf.format(time) +
+                "\n<#"+channelID+">");
+
+        ticket.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
+
+    public void sendWelcomeMessage(TextChannel welcomeChannel, Member member) {
+        embedBuilder.clear();
+
+        embedBuilder.setTitle("Witamy "+member.getEffectiveName()+"!");
+        embedBuilder.setColor(Color.GREEN);
+        embedBuilder.setDescription("Witamy na serwerze **" + Main.serverName + "**");
+        embedBuilder.setTimestamp(Instant.now());
+
+        welcomeChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
+
+    public void sendShopEmbedMessage(SlashCommandInteractionEvent event) {
+        TextChannel textChannel = event.getGuildChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.serverName + " shop informations");
+        embedBuilder.setColor(Color.YELLOW);
+
+        embedBuilder.setDescription("Najważniejsze informacje odnośnie funkcjonowania sklepu");
+
+        embedBuilder.addBlankField(false);
+
+        embedBuilder.addField("Znalazłeś skrypt, którego szukasz?", "Utwórz ticket na kanale <#1145139398204215406> i poinformuj nas, że chcesz kupić dostęp do niego.\n" +
+                "Po dogadaniu się z płatnością dostaniesz dostęp do prywatnego repozytorium na GitHubie, gdzie będziesz mógł go pobrać" +
+                "i będziesz na bieżąco z aktualizacjami", true);
+
+        embedBuilder.addField("Nie ma w sklepie tego czego szukasz?",
+                "To nie problem! Utwórz ticket na kanale <#1145139398204215406> i napisz czego oczekujesz od skryptu, a my zajmiemy się resztą.", true);
+
+        embedBuilder.addBlankField(false);
+
+        embedBuilder.addField("Nie masz wystarczającej wiedzy jak wgrać skrypt na swój serwer?",
+                "To również nie problem! Posiadamy rozbudowaną sekcję poradników, gdzie na kanale <#1145107437414789160>" +
+                        " znajdziesz dokładny poradnik jak wgrać skrypt krok po kroku. \n" +
+                        "Jeżeli natomiast będziesz miał jakiś problem pomocy uzyskasz na kanale <#1150189231994589264>." +
+                        " W ostateczności możesz również utworzyć ticket na kanale <#1145139398204215406>, a **" + Main.serverName +
+                        " Staff** pomoże Ci w rozwiązaniu tego problemu.", true);
+
+        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
+}
