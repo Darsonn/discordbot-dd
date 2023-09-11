@@ -13,4 +13,14 @@ public class TicketLogs {
         TextChannel ticketLogsChannel = member.getJDA().getTextChannelById(ticketLogsChannelID);
         embedMessageGenerator.sendInformationAboutCreationNewTicket(ticketLogsChannel, member, channelID);
     }
+
+    public void closeTicket(Member member, String channelID) {
+        TextChannel ticketLogsChannel = member.getJDA().getTextChannelById(ticketLogsChannelID);
+        embedMessageGenerator.sendInformationAboutClosingTicket(ticketLogsChannel, member, channelID);
+    }
+
+    public void deleteTicket(Member member, String channelID) {
+        TextChannel ticketLogsChannel = member.getJDA().getTextChannelById(ticketLogsChannelID);
+        embedMessageGenerator.sendInformationAboutDeletingTicket(ticketLogsChannel, member, channelID);
+    }
 }

@@ -13,6 +13,7 @@ import pl.darsonn.discordbot.Main;
 import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
 
 import java.util.EnumSet;
+import java.util.Objects;
 
 public class TicketSystemListener extends ListenerAdapter {
     TicketLogs ticketLogs = new TicketLogs();
@@ -84,7 +85,7 @@ public class TicketSystemListener extends ListenerAdapter {
 
     public void sendPanelInTicket(ButtonInteractionEvent event, String channelID, String ticketType) {
         TextChannel ticket = event.getJDA().getTextChannelById(channelID);
-        ticketLogs.createTicket(event.getMember(), channelID);
+        ticketLogs.createTicket(Objects.requireNonNull(event.getMember()), channelID);
         embedMessageGenerator.sendPanelInTicket(ticket, event.getMember(), ticketType);
     }
 
@@ -94,11 +95,14 @@ public class TicketSystemListener extends ListenerAdapter {
         Member member = event.getMember();          // TODO: DO POPRAWY
         channel.getManager().removePermissionOverride(member).queue();
 
+        ticketLogs.closeTicket(Objects.requireNonNull(event.getMember()), channel.getId());
         embedMessageGenerator.sendPanelStaffAfterClosingTicket(channel, member);
     }
 
     public void removeTicket(ButtonInteractionEvent event) {
         TextChannel channel = event.getChannel().asTextChannel();
         channel.delete().reason("Ticket closed.").queue();
+
+        ticketLogs.deleteTicket(Objects.requireNonNull(event.getMember()), channel.getId());
     }
 }
