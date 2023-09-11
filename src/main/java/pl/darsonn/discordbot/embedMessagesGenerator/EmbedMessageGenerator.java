@@ -126,15 +126,37 @@ public class EmbedMessageGenerator {
         ticket.sendMessageEmbeds(embedBuilder.build()).queue();
     }
 
-    public void sendInformationAboutCreationNewTicket(TextChannel ticket, Member member, String channelID) {
+    public void sendInformationAboutCreationNewTicket(TextChannel ticketLogsChannel, Member member, String channelID) {
         embedBuilder.clear();
 
         embedBuilder.setTitle("Ticket created");
         embedBuilder.setColor(Color.GREEN);
         embedBuilder.setDescription("Created by " + member.getEffectiveName() + " at " + dtf.format(time) +
-                "\n<#"+channelID+">");
+                "\n<#" + channelID + ">");
 
-        ticket.sendMessageEmbeds(embedBuilder.build()).queue();
+        ticketLogsChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
+
+    public void sendInformationAboutClosingTicket(TextChannel ticketLogsChannel, Member member, String channelID) {
+        embedBuilder.clear();
+
+        embedBuilder.setTitle("Ticket closed");
+        embedBuilder.setColor(Color.YELLOW);
+        embedBuilder.setDescription("Closed by " + member.getEffectiveName() + " at " + dtf.format(time) +
+                "\n<#" + channelID + ">");
+
+        ticketLogsChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
+
+    public void sendInformationAboutDeletingTicket(TextChannel ticketLogsChannel, Member member, String channelID) {
+        embedBuilder.clear();
+
+        embedBuilder.setTitle("Ticket deleted");
+        embedBuilder.setColor(Color.RED);
+        embedBuilder.setDescription("Deleted by " + member.getEffectiveName() + " at " + dtf.format(time) +
+                "\n<#" + channelID + ">");
+
+        ticketLogsChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
 
     public void sendWelcomeMessage(TextChannel welcomeChannel, Member member) {
