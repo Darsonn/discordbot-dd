@@ -30,8 +30,25 @@ public class EmbedMessageGenerator {
         embedBuilder.setTitle(Main.serverName);
         embedBuilder.setColor(Color.YELLOW);
 
-        embedBuilder.addField("Regulamin jest dostępny na naszej stronie internetowej\n",
-                "[Rules - " + Main.serverName + "](" + Main.rulesLink + ")", false);
+        embedBuilder.addBlankField(false);
+
+        embedBuilder.addField("Zasady ogólne - panujące na serwerze " + Main.serverName,
+                """
+                        1. Szanuj innych użytkowników.
+                        2. Zakaz wysyłania treści dla osób pełnoletnich.
+                        3. Nie promuj żadnych treści o charakterze rasistowskim, seksistowskim, homofobicznym ani innym obraźliwym.
+                        4. Wszelkie treści spamu będą natychmiastowo usuwane.
+                        5. Reklama jest dozwolona tylko i wyłącznie na przeznaczonych do tego kanałach lub za zgodą administracji
+                        
+                        Na serwerze dodatkowo obowiązują ogólnie ustanowione zasady [Discord Terms of Service](https://discord.com/terms)
+                        """, false);
+
+        //kontynuacja
+
+//        embedBuilder.addField("Regulamin jest dostępny na naszej stronie internetowej\n",
+//                "[Rules - " + Main.serverName + "](" + Main.rulesLink + ")", false);
+
+        embedBuilder.setTimestamp(Instant.now());
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
