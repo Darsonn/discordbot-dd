@@ -8,8 +8,10 @@ import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import pl.darsonn.discordbot.Main;
+import pl.darsonn.discordbot.database.DatabaseOperation;
 
 import java.awt.*;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +20,7 @@ public class EmbedMessageGenerator {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
     LocalDateTime time = LocalDateTime.now();
     EmbedBuilder embedBuilder = new EmbedBuilder();
+    DatabaseOperation databaseOperation = new DatabaseOperation();
 
     public void sendRulesEmbedMessage(SlashCommandInteractionEvent event) {
         TextChannel textChannel = event.getGuildChannel().asTextChannel();
@@ -126,37 +129,46 @@ public class EmbedMessageGenerator {
         ticket.sendMessageEmbeds(embedBuilder.build()).queue();
     }
 
-    public void sendInformationAboutCreationNewTicket(TextChannel ticketLogsChannel, Member member, String channelID) {
+    public void sendInformationAboutCreationNewTicket(TextChannel ticketLogsChannel, Member member, String channelID, Timestamp timestamp) {
         embedBuilder.clear();
 
         embedBuilder.setTitle("Ticket created");
         embedBuilder.setColor(Color.GREEN);
-        embedBuilder.setDescription("Created by " + member.getEffectiveName() + " at " + dtf.format(time) +
+        embedBuilder.setDescription("Created by " + member.getAsMention() + " at " + timestamp +
                 "\n<#" + channelID + ">");
 
         ticketLogsChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
 
-    public void sendInformationAboutClosingTicket(TextChannel ticketLogsChannel, Member member, String channelID) {
+    public void sendInformationAboutClosingTicket(TextChannel ticketLogsChannel, Member member, String channelID, Timestamp closingDate) {
         embedBuilder.clear();
 
-        embedBuilder.setTitle("Ticket closed");
+        embedBuilder.setTitle("<#" + channelID + "> - Ticket closed");
         embedBuilder.setColor(Color.YELLOW);
-        embedBuilder.setDescription("Closed by " + member.getEffectiveName() + " at " + dtf.format(time) +
-                "\n<#" + channelID + ">");
+        embedBuilder.addField("Opened", "by <@" + databaseOperation.getTicketOpener(channelID) + ">\nat " +
+                databaseOperation.getTicketCreateDate(channelID), false);
+        embedBuilder.addField("Closed", "by " + member.getAsMention() + "\nat " +
+                closingDate, false);
 
         ticketLogsChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+
+        databaseOperation.closeTicket(channelID, member.getId(), closingDate);
     }
 
-    public void sendInformationAboutDeletingTicket(TextChannel ticketLogsChannel, Member member, String channelID) {
+    public void sendInformationAboutDeletingTicket(TextChannel ticketLogsChannel, Member member, String channelID, Timestamp closingDate) {
         embedBuilder.clear();
 
-        embedBuilder.setTitle("Ticket deleted");
+        embedBuilder.setTitle("<#" + channelID + "> - Ticket deleted");
         embedBuilder.setColor(Color.RED);
-        embedBuilder.setDescription("Deleted by " + member.getEffectiveName() + " at " + dtf.format(time) +
-                "\n<#" + channelID + ">");
+        embedBuilder.addField("Opened", "by <@" + databaseOperation.getTicketOpener(channelID) + ">\nat " +
+                databaseOperation.getTicketCreateDate(channelID), false);
+        embedBuilder.addField("Deleted", "by " + member.getAsMention() + "\nat " +
+                closingDate, false);
 
         ticketLogsChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+
+        databaseOperation.closeTicket(channelID, member.getId(), closingDate);
+
     }
 
     public void sendWelcomeMessage(TextChannel welcomeChannel, Member member) {

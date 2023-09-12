@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import pl.darsonn.discordbot.commands.CommandsCreator;
 import pl.darsonn.discordbot.commands.EventHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.darsonn.discordbot.database.DatabaseOperation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +19,9 @@ public class Main {
 
     public static void main(String[] args) {
         loadConfig();
+
+        DatabaseOperation databaseOperation = new DatabaseOperation();
+        databaseOperation.getConnection();
 
         JDA builder = JDABuilder.createLight(args[0], EnumSet.noneOf(GatewayIntent.class))
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
