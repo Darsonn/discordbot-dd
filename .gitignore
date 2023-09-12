@@ -12,6 +12,7 @@ target/
 *.iws
 *.iml
 *.ipr
+pom.xml
 
 ### Eclipse ###
 .apt_generated
@@ -39,5 +40,5 @@ build/
 .DS_Store
 
 ### Unnecessary files ###
-config.json
+src/main/resources/config.json
 pom.xml
