@@ -53,6 +53,12 @@ public class CommandsCreator {
                         .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE))
         );
 
+        commands.addCommands(
+                Commands.slash("sendpricelist", "Wysyła wiadomość z cenami za usługi")
+                        .setGuildOnly(true)
+                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
+        );
+
         commands.queue();
     }
 }

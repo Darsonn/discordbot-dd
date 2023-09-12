@@ -39,6 +39,7 @@ public class EventHandler extends ListenerAdapter {
             case "sendstatusroles" -> sendStatusRolesCommand(event);
             case "sendlinkmessage" -> sendLinksMessageCommand(event);
             case "purge" -> purgeCommand(event);
+            case "sendpricelist" -> sendPriceListCommand(event);
             //case "editstatusofapplication" ->
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
@@ -118,5 +119,10 @@ public class EventHandler extends ListenerAdapter {
                         Button.secondary(userId + ":delete", "Rezygnuję"),
                         Button.danger(userId + ":prune:" + amount, "Tak"))
                 .queue();
+    }
+
+    private void sendPriceListCommand(SlashCommandInteractionEvent event) {
+        event.reply("Message with price list sent!").setEphemeral(true).queue();
+        embedMessageGenerator.sendPriceListEmbedMessage(event);
     }
 }

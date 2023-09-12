@@ -256,4 +256,16 @@ public class EmbedMessageGenerator {
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
+
+    public void sendPriceListEmbedMessage(SlashCommandInteractionEvent event) {
+        TextChannel textChannel = event.getChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle("Cennik - " + Main.serverName);
+        embedBuilder.setDescription("Cennik usług podstawowych");
+        embedBuilder.setColor(Color.YELLOW);
+
+        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+    }
 }
