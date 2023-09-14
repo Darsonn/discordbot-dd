@@ -100,9 +100,10 @@ public class EmbedMessageGenerator {
                 break;
             case "shop":
                 embedBuilder.addField("Chcesz zakupić skrypt/usługę nie wymieniony w <#1150210897256665129>?",
-                        "- Proszę opisać jakie funkcjonalności powinien zawierać ten skrypt" +
-                                "\n- Na jaki framework skrypt ma zostać napisany" +
-                                "\n- Inne dodatkowe informacje", true);
+                        """
+                                - Proszę opisać jakie funkcjonalności powinien zawierać ten skrypt
+                                - Na jaki framework skrypt ma zostać napisany
+                                - Inne dodatkowe informacje""", true);
                 embedBuilder.addField("Chcesz kupić jeden ze skryptów z <#1150210897256665129>?",
                         "- Proszę podać skrypt/usługę, którą chcesz zakupić" +
                                 "\n- Czy będziesz potrzebował edycji/dostosowania owego skryptu pod swój serwer?", true);
@@ -115,12 +116,14 @@ public class EmbedMessageGenerator {
                 break;
             case "applydev":
                 embedBuilder.addField("Niezbędne informacje jakie powinieneś zawrzeć",
-                        "- Imię" +
-                                "\n- Wiek" +
-                                "\n- Doświadczenie" +
-                                "\n- Portfolio" +
-                                "\n- Umiejętności" +
-                                "\n\nPo napisaniu podania zadamy kilka pytań uzupełniających.", true);
+                        """
+                                - Imię
+                                - Wiek
+                                - Doświadczenie
+                                - Portfolio
+                                - Umiejętności
+
+                                Po napisaniu podania zadamy kilka pytań uzupełniających.""", true);
                 break;
             case "applycreator":
                 embedBuilder.setDescription("Creator is closed position!");
