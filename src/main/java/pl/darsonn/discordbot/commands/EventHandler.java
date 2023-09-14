@@ -99,8 +99,8 @@ public class EventHandler extends ListenerAdapter {
 
     private void sendStatusRolesCommand(SlashCommandInteractionEvent event) {
         event.reply("Message with roles status sent!").setEphemeral(true).queue();
-        embedMessageGenerator.sendStatusRolesEmbedMessage(event, event.getOption("administrator").getAsBoolean(),
-                event.getOption("developer").getAsBoolean(), event.getOption("creator").getAsBoolean());
+        embedMessageGenerator.sendStatusRolesEmbedMessage(event, Objects.requireNonNull(event.getOption("administrator")).getAsBoolean(),
+                Objects.requireNonNull(event.getOption("developer")).getAsBoolean(), Objects.requireNonNull(event.getOption("creator")).getAsBoolean());
     }
 
     private void sendLinksMessageCommand(SlashCommandInteractionEvent event) {
