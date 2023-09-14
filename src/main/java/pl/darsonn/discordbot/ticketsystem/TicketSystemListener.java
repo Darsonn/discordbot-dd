@@ -2,7 +2,6 @@ package pl.darsonn.discordbot.ticketsystem;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.UserSnowflake;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -24,7 +23,7 @@ public class TicketSystemListener extends ListenerAdapter {
     DatabaseOperation databaseOperation = new DatabaseOperation();
 
     public void interactionListener(ButtonInteractionEvent event, Button component) {
-        switch (component.getId()) {
+        switch (Objects.requireNonNull(component.getId())) {
             case "main-open-ticket" -> createTicket(event);
             case "shop-open-ticket" -> createShopTicket(event);
             case "apply-open-ticket" -> embedMessageGenerator.sendApplyOptionsMenu(event);
@@ -34,13 +33,13 @@ public class TicketSystemListener extends ListenerAdapter {
     }
 
     public void createApplyTicket(StringSelectInteractionEvent event, String option) {
-        Category category = event.getGuild().getCategoryById(Main.ticketSystemCategoryID);
-        String textChannel = option + "-"+event.getMember().getEffectiveName();
+        Category category = Objects.requireNonNull(event.getGuild()).getCategoryById(Main.ticketSystemCategoryID);
+        String textChannel = option + "-"+ Objects.requireNonNull(event.getMember()).getEffectiveName();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         if(event.getJDA().getTextChannelsByName(textChannel, true).isEmpty()) {
-            ChannelAction<TextChannel> channelAction = category.createTextChannel(textChannel);
-            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null);
+            ChannelAction<TextChannel> channelAction = Objects.requireNonNull(category).createTextChannel(textChannel);
+            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null).queue();
             channelAction.queue(channel -> {
                 String channelID = channel.getId();
                 TextChannel ticket = event.getJDA().getTextChannelById(channelID);
@@ -55,13 +54,13 @@ public class TicketSystemListener extends ListenerAdapter {
     }
 
     public void createShopTicket(ButtonInteractionEvent event) {
-        Category category = event.getGuild().getCategoryById(Main.ticketSystemCategoryID);
-        String textChannel = "shop-"+event.getMember().getEffectiveName();
+        Category category = Objects.requireNonNull(event.getGuild()).getCategoryById(Main.ticketSystemCategoryID);
+        String textChannel = "shop-"+ Objects.requireNonNull(event.getMember()).getEffectiveName();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         if(event.getJDA().getTextChannelsByName(textChannel, true).isEmpty()) {
-            ChannelAction<TextChannel> channelAction = category.createTextChannel(textChannel);
-            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null);
+            ChannelAction<TextChannel> channelAction = Objects.requireNonNull(category).createTextChannel(textChannel);
+            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null).queue();
             channelAction.queue(channel -> {
                 String channelID = channel.getId();
                 databaseOperation.createTicket(event.getMember(), "shop", channel, timestamp);
@@ -74,13 +73,13 @@ public class TicketSystemListener extends ListenerAdapter {
     }
 
     public void createTicket(ButtonInteractionEvent event) {
-        Category category = event.getGuild().getCategoryById(Main.ticketSystemCategoryID);
-        String textChannel = "ticket-"+event.getMember().getEffectiveName();
+        Category category = Objects.requireNonNull(event.getGuild()).getCategoryById(Main.ticketSystemCategoryID);
+        String textChannel = "ticket-"+ Objects.requireNonNull(event.getMember()).getEffectiveName();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         if(event.getJDA().getTextChannelsByName(textChannel, true).isEmpty()) {
-            ChannelAction<TextChannel> channelAction = category.createTextChannel(textChannel);
-            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null);
+            ChannelAction<TextChannel> channelAction = Objects.requireNonNull(category).createTextChannel(textChannel);
+            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null).queue();
             channelAction.queue(channel -> {
                 String channelID = channel.getId();
                 databaseOperation.createTicket(event.getMember(), "ticket", channel, timestamp);
@@ -102,8 +101,8 @@ public class TicketSystemListener extends ListenerAdapter {
         TextChannel channel = event.getChannel().asTextChannel();
         event.reply("Zamknięto ticket <#"+channel.getId()+">").setEphemeral(true).queue();
         String openerID = databaseOperation.getTicketOpener(channel.getId());
-        Member member = event.getGuild().getMemberById(openerID);          // TODO: DO POPRAWY
-        channel.getManager().removePermissionOverride(member).queue();
+        Member member = Objects.requireNonNull(event.getGuild()).getMemberById(openerID);          // TODO: DO POPRAWY
+        channel.getManager().removePermissionOverride(Objects.requireNonNull(member)).queue();
 
         ticketLogs.closeTicket(Objects.requireNonNull(event.getMember()), channel.getId());
         embedMessageGenerator.sendPanelStaffAfterClosingTicket(channel, member);
