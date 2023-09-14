@@ -45,9 +45,6 @@ public class EmbedMessageGenerator {
 
         //kontynuacja
 
-//        embedBuilder.addField("Regulamin jest dostępny na naszej stronie internetowej\n",
-//                "[Rules - " + Main.serverName + "](" + Main.rulesLink + ")", false);
-
         embedBuilder.setTimestamp(Instant.now());
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
@@ -62,9 +59,12 @@ public class EmbedMessageGenerator {
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.addField("Przed utworzeniem ticketa!",
-                "Upewnij się, że przeczytałeś takie kanały jak: <#1150210897256665129>, <#1118929071997460650> oraz <#1145107437414789160>." +
-                        "\n\nW przypadku utworzenia ticketa bez powodu będą wyciągane z tego tytułu konsekwencje." +
-                        "\n\nWybierz rodzaj sprawy przez którą chcesz utworzyć ticket", true);
+                """
+                        Upewnij się, że przeczytałeś takie kanały jak: <#1150210897256665129>, <#1118929071997460650> oraz <#1145107437414789160>.
+
+                        W przypadku utworzenia ticketa bez powodu będą wyciągane z tego tytułu konsekwencje.
+
+                        Wybierz rodzaj sprawy przez którą chcesz utworzyć ticket""", true);
 
         textChannel.sendMessageEmbeds(embedBuilder.build())
                 .addActionRow(
@@ -75,7 +75,7 @@ public class EmbedMessageGenerator {
                 .queue();
     }
 
-    public void sendApplyOptionsMenu(ButtonInteractionEvent event, Member member) {
+    public void sendApplyOptionsMenu(ButtonInteractionEvent event) {
         event.reply("Wybierz stanowisko na jakie chcesz aplikować")
                 .addActionRow(
                         StringSelectMenu.create("applyoption")

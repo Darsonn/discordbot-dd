@@ -27,7 +27,7 @@ public class TicketSystemListener extends ListenerAdapter {
         switch (component.getId()) {
             case "main-open-ticket" -> createTicket(event);
             case "shop-open-ticket" -> createShopTicket(event);
-            case "apply-open-ticket" -> embedMessageGenerator.sendApplyOptionsMenu(event, event.getMember());
+            case "apply-open-ticket" -> embedMessageGenerator.sendApplyOptionsMenu(event);
             //case "close-ticket" -> closeTicket(event);
             case "close-ticket" -> removeTicket(event);
         }
