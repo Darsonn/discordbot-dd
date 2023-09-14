@@ -4,10 +4,10 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
-import static net.dv8tion.jda.api.interactions.commands.OptionType.BOOLEAN;
-import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 public class CommandsCreator {
     public void createCommands(JDA builder) {
@@ -55,6 +55,13 @@ public class CommandsCreator {
 
         commands.addCommands(
                 Commands.slash("sendpricelist", "Wysyła wiadomość z cenami za usługi")
+                        .addOptions(
+                                new OptionData(STRING, "type", "Typ cennika")
+                                        .addChoice("Fivem", "fivem")
+                                        .addChoice("Discord Bot", "dcbot")
+                                        .addChoice("Korepetycje", "korepetycje")
+                                        .setRequired(true)
+                        )
                         .setGuildOnly(true)
                         .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
         );

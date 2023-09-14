@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import pl.darsonn.discordbot.Main;
@@ -15,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class EmbedMessageGenerator {
     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -279,8 +281,21 @@ public class EmbedMessageGenerator {
 
     public void sendPriceListEmbedMessage(SlashCommandInteractionEvent event) {
         TextChannel textChannel = event.getChannel().asTextChannel();
+        String option = Objects.requireNonNull(event.getOption("type")).getAsString();
 
         embedBuilder.clear();
+
+        switch (option) {
+            case "fivem" -> {
+                embedBuilder.addField("Usługi Fivem", "", false);
+            }
+            case "dcbot" -> {
+                embedBuilder.addField("Discord Bot", "", false);
+            }
+            case "korepetycje" -> {
+                embedBuilder.addField("Korepetycje", "", false);
+            }
+        }
 
         embedBuilder.setTitle("Cennik - " + Main.serverName);
         embedBuilder.setDescription("Cennik usług podstawowych");
