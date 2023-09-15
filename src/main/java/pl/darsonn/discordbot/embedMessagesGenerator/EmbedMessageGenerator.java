@@ -303,4 +303,19 @@ public class EmbedMessageGenerator {
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
+
+    public void sendWIPEmbedMessage(SlashCommandInteractionEvent event) {
+        TextChannel textChannel = event.getChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.serverName + " - WIP");
+        embedBuilder.setColor(Color.YELLOW);
+
+        embedBuilder.setDescription("Ten element nie został jeszcze ukończony.");
+
+        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+
+        event.reply("Utworzono wiadomość").setEphemeral(true).queue();
+    }
 }

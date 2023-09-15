@@ -66,6 +66,12 @@ public class CommandsCreator {
                         .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
         );
 
+        commands.addCommands(
+                Commands.slash("sendwip", "Wysyła wiadomość work in progress")
+                        .setGuildOnly(true)
+                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
+        );
+
         commands.queue();
     }
 }
