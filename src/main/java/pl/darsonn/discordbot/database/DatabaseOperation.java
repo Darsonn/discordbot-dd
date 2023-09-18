@@ -34,6 +34,7 @@ public class DatabaseOperation {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DatabaseOperation.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Błąd z połączeniem z bazą danych.");
+            System.exit(101);
             return null;
         }
     }
