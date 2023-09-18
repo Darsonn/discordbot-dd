@@ -53,6 +53,7 @@ public class DatabaseOperation {
             statement.setString(9, channel.getId());
             statement.execute();
         } catch (SQLException e) {
+            System.err.println("Błąd podczas wprowadzania nowego ticketa do bazy danych");
             e.printStackTrace();
         }
     }
@@ -73,6 +74,7 @@ public class DatabaseOperation {
             }
             return ticketCreateDate;
         } catch (SQLException e) {
+            System.err.println("Błąd podczas odczytu daty utworzenia ticketa z bazy danych");
             e.printStackTrace();
             return null;
         }
@@ -89,6 +91,7 @@ public class DatabaseOperation {
             }
             return ticketOpener;
         } catch (SQLException e) {
+            System.err.println("Błąd podczas odczytu właściciela ticketa z bazy danych");
             e.printStackTrace();
             return null;
         }
@@ -100,6 +103,7 @@ public class DatabaseOperation {
             statement.setString(1, ticketCloserID);
             statement.executeUpdate();
         } catch (SQLException e) {
+            System.err.println("Błąd podczas edytowania ticketa po zamknięciu w bazie danych");
             e.printStackTrace();
         }
     }
@@ -110,6 +114,7 @@ public class DatabaseOperation {
             statement.setTimestamp(1, timestamp);
             statement.executeUpdate();
         } catch (SQLException e) {
+            System.err.println("Błąd podczas edytowania ticketa po zamknięciu w bazie danych");
             e.printStackTrace();
         }
     }
