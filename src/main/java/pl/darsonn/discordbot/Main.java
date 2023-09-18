@@ -47,7 +47,7 @@ public class Main {
             ticketSystemCategoryID = config.getTicketSystemCategoryID();
             ticketChannelID= config.getTicketChannelID();
         } catch (IOException e) {
-            System.out.println("Plik konfiguracyjny nie istnieje lub źle został zdefiniowany.");
+            System.err.println("Plik konfiguracyjny nie istnieje lub źle został zdefiniowany.");
             throw new RuntimeException(e);
         }
     }
