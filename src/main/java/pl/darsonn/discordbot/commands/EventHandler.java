@@ -52,6 +52,12 @@ public class EventHandler extends ListenerAdapter {
 
         if(Objects.requireNonNull(component.getId()).endsWith("-ticket")) {
             ticketSystemListener.interactionListener(event, component);
+        } else if (Objects.requireNonNull(component.getId()).startsWith("requirements")) {
+            switch (component.getId()) {
+                case "requirements-adm" -> embedMessageGenerator.sendRequirements(event, "adm");
+                case "requirements-dev" -> embedMessageGenerator.sendRequirements(event, "dev");
+                case "requirements-tworca" -> embedMessageGenerator.sendRequirements(event, "tworca");
+            }
         } else {
             String[] id = event.getComponentId().split(":");
             String authorId = id[0];
