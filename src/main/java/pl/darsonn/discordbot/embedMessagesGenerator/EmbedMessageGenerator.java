@@ -231,6 +231,14 @@ public class EmbedMessageGenerator {
                         " W ostateczności możesz również utworzyć ticket na kanale <#" + Main.ticketChannelID + ">, a **" + Main.serverName +
                         " Staff** pomoże Ci w rozwiązaniu tego problemu.", true);
 
+        embedBuilder.addBlankField(false);
+
+        embedBuilder.addField("Zasady gwarancji",
+                "Jako zespół developerski udzielamy wsparcia w przypadku gdy skrypt będzię zawierał błędy oraz " +
+                        "któraś z wcześniej ustalonych rzeczy nie została uwzględniona i/lub wykonana.", false);
+
+        embedBuilder.addField("Uwaga!", "Pieniędzy za wykonany skrypt **nie** zwracamy!", false);
+
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
 
@@ -269,7 +277,8 @@ public class EmbedMessageGenerator {
 
         embedBuilder.setTitle("Linki do narzędzi potrzebnych w tej kategorii");
         embedBuilder.setColor(Color.YELLOW);
-        embedBuilder.addField("Programowanie", "- [Visual Studio Code](https://code.visualstudio.com)", true);
+        embedBuilder.addField("Programowanie", "- [Visual Studio Code](https://code.visualstudio.com)\n" +
+                "- [Intellij Idea](https://www.jetbrains.com/idea/)", true);
         embedBuilder.addField("Edycja plików pojazdów itd.", "- [OpenIV](https://openiv.com)", true);
         embedBuilder.addField("Grafika",
                 "- [GIMP](https://www.gimp.org/) (darmowa opcja)" +
