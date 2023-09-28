@@ -267,7 +267,12 @@ public class EmbedMessageGenerator {
                 "<#1145139398204215406>, dalej zostanie przedstawiony cały proces rekrutacyjny w zależności " +
                 "od aplikowanego stanowiska", true);
 
-        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+        textChannel.sendMessageEmbeds(embedBuilder.build())
+                .addActionRow(
+                    Button.success("requirements-adm", "Wymagania na Administratora").asEnabled(),
+                    Button.success("requirements-dev", "Wymagania na Developera").asEnabled(),
+                    Button.success("requirements-tworca", "Wymagania na Twórcę").asDisabled()
+                ).queue();
     }
 
     public void sendLinksEmbedMessage(SlashCommandInteractionEvent event) {
@@ -325,5 +330,30 @@ public class EmbedMessageGenerator {
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
 
         event.reply("Utworzono wiadomość").setEphemeral(true).queue();
+    }
+
+    public void sendRequirements(ButtonInteractionEvent event, String type) {
+        TextChannel textChannel = event.getChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.serverName + " - WIP");
+        embedBuilder.setColor(Color.YELLOW);
+
+        if(type.equals("adm")) {
+            embedBuilder.addField("Wymagania na stanowisko **Administrator**",
+                    "Na stanowisko administratora wymagane jest: " +
+                            "Work in progress", false);
+        } else if (type.equals("dev")) {
+            embedBuilder.addField("Wymagania na stanowisko **Developera**",
+                    "Na stanowisko developera wymagane jest: " +
+                            "Work in progress", false);
+        } else if (type.equals("tworca")) {
+            embedBuilder.addField("Wymagania na stanowisko **Twórca**",
+                    "Na stanowisko twórcy wymagane jest: " +
+                            "Work in progress", false);
+        }
+
+        embedBuilder.setDescription(""); //TODO
     }
 }
