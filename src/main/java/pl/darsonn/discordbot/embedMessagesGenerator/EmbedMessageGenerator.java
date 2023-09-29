@@ -270,8 +270,8 @@ public class EmbedMessageGenerator {
         textChannel.sendMessageEmbeds(embedBuilder.build())
                 .addActionRow(
                     Button.success("requirements-adm", "Wymagania na Administratora").asEnabled(),
-                    Button.success("requirements-dev", "Wymagania na Developera").asEnabled(),
-                    Button.success("requirements-tworca", "Wymagania na Twórcę").asDisabled()
+                    Button.primary("requirements-dev", "Wymagania na Developera").asEnabled(),
+                    Button.danger("requirements-tworca", "Wymagania na Twórcę").asDisabled()
                 ).queue();
     }
 
@@ -333,8 +333,6 @@ public class EmbedMessageGenerator {
     }
 
     public void sendRequirements(ButtonInteractionEvent event, String type) {
-        TextChannel textChannel = event.getChannel().asTextChannel();
-
         embedBuilder.clear();
 
         embedBuilder.setTitle(Main.serverName + " - WIP");
@@ -342,12 +340,19 @@ public class EmbedMessageGenerator {
 
         if(type.equals("adm")) {
             embedBuilder.addField("Wymagania na stanowisko **Administrator**",
-                    "Na stanowisko administratora wymagane jest: " +
-                            "Work in progress", false);
+                    """
+                            Na stanowisko administratora wymagane jest:\s
+                            - min. 16 lat
+                            - doświadczenie na podobnym stanowisku
+                            - czas na sprawdzanie kanałów""", false);
         } else if (type.equals("dev")) {
             embedBuilder.addField("Wymagania na stanowisko **Developera**",
-                    "Na stanowisko developera wymagane jest: " +
-                            "Work in progress", false);
+                    """
+                            Na stanowisko developera wymagane jest:\s
+                            - umiejętność tworzenia skryptów/oprogramowania itd. w dziedzinach wymienionych na kanale <#1150859679463915591> lub inne przydatne umiejętności w tematyce serwera
+                            - umiejętność tworzenia kodu z dobrą optymalizacją
+                            - umiejętność pracy zespołowej za pomocą VCS (Git)
+                            """, false);
         } else if (type.equals("tworca")) {
             embedBuilder.addField("Wymagania na stanowisko **Twórca**",
                     "Na stanowisko twórcy wymagane jest: " +
@@ -355,5 +360,7 @@ public class EmbedMessageGenerator {
         }
 
         embedBuilder.setDescription(""); //TODO
+
+        event.replyEmbeds(embedBuilder.build()).setEphemeral(true).queue();
     }
 }
