@@ -2,6 +2,8 @@ package pl.darsonn.discordbot.ticketsystem;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageHistory;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -15,6 +17,7 @@ import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
 
 import java.sql.Timestamp;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Objects;
 
 public class TicketSystemListener extends ListenerAdapter {
@@ -110,6 +113,14 @@ public class TicketSystemListener extends ListenerAdapter {
 
     public void removeTicket(ButtonInteractionEvent event) {
         TextChannel channel = event.getChannel().asTextChannel();
+
+        MessageHistory messageHistory = MessageHistory.getHistoryFromBeginning(channel).complete();
+        List<Message> messageList = messageHistory.getRetrievedHistory();
+
+        for (Message message : messageList) {
+            System.out.println(message);
+        }
+
         channel.delete().reason("Ticket closed.").queue();
 
         ticketLogs.deleteTicket(Objects.requireNonNull(event.getMember()), channel.getId());

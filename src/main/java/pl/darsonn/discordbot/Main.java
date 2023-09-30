@@ -24,7 +24,7 @@ public class Main {
         databaseOperation.getConnection();
 
         JDA builder = JDABuilder.createLight(args[0], EnumSet.noneOf(GatewayIntent.class))
-                .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.MESSAGE_CONTENT)
                 .setActivity(Activity.watching(Main.serverName))
                 .addEventListeners(new EventHandler())
                 .build();
