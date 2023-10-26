@@ -72,6 +72,12 @@ public class CommandsCreator {
                         .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
         );
 
+        commands.addCommands(
+                Commands.slash("sendpartnerinfo", "Wysyła wiadomość partner informations")
+                        .setGuildOnly(true)
+                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
+        );
+
         commands.queue();
     }
 }

@@ -215,18 +215,18 @@ public class EmbedMessageGenerator {
 
         embedBuilder.addBlankField(false);
 
-        embedBuilder.addField("Znalazłeś skrypt, którego szukasz?", "Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i poinformuj nas, że chcesz kupić dostęp do niego.\n" +
+        embedBuilder.addField("Znalazłeś produkt, którego szukasz?", "Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i poinformuj nas, że chcesz kupić dostęp do niego.\n" +
                 "Po dogadaniu się z płatnością dostaniesz dostęp do prywatnego repozytorium na GitHubie, gdzie będziesz mógł go pobrać" +
                 "i będziesz na bieżąco z aktualizacjami", true);
 
         embedBuilder.addField("Nie ma w sklepie tego czego szukasz?",
-                "To nie problem! Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i napisz czego oczekujesz od skryptu, a my zajmiemy się resztą.", true);
+                "To nie problem! Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i napisz czego oczekujesz, a my zajmiemy się resztą.", true);
 
         embedBuilder.addBlankField(false);
 
-        embedBuilder.addField("Nie masz wystarczającej wiedzy jak wgrać skrypt na swój serwer?",
+        embedBuilder.addField("Nie masz wystarczającej wiedzy jak uruchomić oraz skonfigurować bota na swój serwer?",
                 "To również nie problem! Posiadamy rozbudowaną sekcję poradników, gdzie na kanale <#1145107437414789160>" +
-                        " znajdziesz dokładny poradnik jak wgrać skrypt krok po kroku. \n" +
+                        " znajdziesz dokładny poradnik jak tego dokonać krok po kroku. \n" +
                         "Jeżeli natomiast będziesz miał jakiś problem pomocy uzyskasz na kanale <#1150189231994589264>." +
                         " W ostateczności możesz również utworzyć ticket na kanale <#" + Main.ticketChannelID + ">, a **" + Main.serverName +
                         " Staff** pomoże Ci w rozwiązaniu tego problemu.", true);
@@ -234,7 +234,7 @@ public class EmbedMessageGenerator {
         embedBuilder.addBlankField(false);
 
         embedBuilder.addField("Zasady gwarancji",
-                "Jako zespół developerski udzielamy wsparcia w przypadku gdy skrypt będzię zawierał błędy oraz " +
+                "Jako zespół developerski udzielamy wsparcia w przypadku gdy bot będzię zawierał błędy oraz " +
                         "któraś z wcześniej ustalonych rzeczy nie została uwzględniona i/lub wykonana.", false);
 
         embedBuilder.addField("Uwaga!", "Pieniędzy za wykonany skrypt **nie** zwracamy!", false);
@@ -362,5 +362,20 @@ public class EmbedMessageGenerator {
         embedBuilder.setDescription(""); //TODO
 
         event.replyEmbeds(embedBuilder.build()).setEphemeral(true).queue();
+    }
+
+    public void sendPartnerInfo(SlashCommandInteractionEvent event) {
+        TextChannel textChannel = event.getChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.serverName + " - Partner informations");
+        embedBuilder.setColor(Color.YELLOW);
+
+        embedBuilder.setDescription("Ten element nie został jeszcze ukończony.");
+
+        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+
+        event.reply("Utworzono wiadomość").setEphemeral(true).queue();
     }
 }

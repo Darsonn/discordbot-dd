@@ -41,6 +41,7 @@ public class EventHandler extends ListenerAdapter {
             case "purge" -> purgeCommand(event);
             case "sendpricelist" -> sendPriceListCommand(event);
             case "sendwip" -> embedMessageGenerator.sendWIPEmbedMessage(event);
+            case "sendpartnerinfo" -> sendPartnerInfoCommand(event);
             //case "editstatusofapplication" ->
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
@@ -131,5 +132,10 @@ public class EventHandler extends ListenerAdapter {
     private void sendPriceListCommand(SlashCommandInteractionEvent event) {
         event.reply("Message with price list sent!").setEphemeral(true).queue();
         embedMessageGenerator.sendPriceListEmbedMessage(event);
+    }
+
+    private void sendPartnerInfoCommand(SlashCommandInteractionEvent event) {
+        event.reply("Message with partners info sent!").setEphemeral(true).queue();
+        embedMessageGenerator.sendPartnerInfo(event);
     }
 }
