@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 import pl.darsonn.discordbot.Main;
 import pl.darsonn.discordbot.database.DatabaseOperation;
 import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
+import pl.darsonn.discordbot.logs.TicketLogs;
 
 import java.sql.Timestamp;
 import java.util.EnumSet;
