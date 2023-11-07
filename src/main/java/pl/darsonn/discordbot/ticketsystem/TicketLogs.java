@@ -1,4 +1,4 @@
-package pl.darsonn.discordbot.logs;
+package pl.darsonn.discordbot.ticketsystem;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
