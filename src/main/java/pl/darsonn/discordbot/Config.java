@@ -33,5 +33,4 @@ public class Config {
     public String getTicketChannelID() {
         return this.ticketChannelID;
     }
-
 }

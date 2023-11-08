@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
-import pl.darsonn.discordbot.Main;
+import pl.darsonn.Main;
 import pl.darsonn.discordbot.database.DatabaseOperation;
 
 import java.awt.*;
@@ -28,12 +28,12 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName);
+        embedBuilder.setTitle(Main.config.getServerName());
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.addBlankField(false);
 
-        embedBuilder.addField("Zasady ogólne - panujące na serwerze " + Main.serverName,
+        embedBuilder.addField("Zasady ogólne - panujące na serwerze " + Main.config.getServerName(),
                 """
                         1. Szanuj innych użytkowników.
                         2. Zakaz wysyłania treści dla osób pełnoletnich.
@@ -56,7 +56,7 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " Ticket Support");
+        embedBuilder.setTitle(Main.config.getServerName() + " Ticket Support");
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.addField("Przed utworzeniem ticketa!",
@@ -71,7 +71,7 @@ public class EmbedMessageGenerator {
                 .addActionRow(
                         Button.primary("main-open-ticket", "Problem ogólny"),
                         Button.success("shop-open-ticket", "Zamówienie/problem ze sklepem"),
-                        Button.danger("apply-open-ticket", "Aplikuj do " + Main.serverName + " Staff")
+                        Button.danger("apply-open-ticket", "Aplikuj do " + Main.config.getServerName() + " Staff")
                 )
                 .queue();
     }
@@ -91,12 +91,12 @@ public class EmbedMessageGenerator {
     public void sendPanelInTicket(TextChannel ticket, Member member, String ticketType) {
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " Ticket Support");
+        embedBuilder.setTitle(Main.config.getServerName() + " Ticket Support");
         embedBuilder.setColor(Color.YELLOW);
 
         switch (ticketType) {
             case "ticket":
-                embedBuilder.setDescription("Dziękujemy za kontakt z "+ Main.serverName +" Support.\n" +
+                embedBuilder.setDescription("Dziękujemy za kontakt z "+ Main.config.getServerName() +" Support.\n" +
                         "Proszę opisać swój problem i czekać na odpowiedź z naszej strony.");
                 break;
             case "shop":
@@ -113,7 +113,7 @@ public class EmbedMessageGenerator {
                 break;
             case "applyadm":
                 embedBuilder.addField("Podanie na administratora jest dostępne na naszej stronie internetowej pod linkiem:",
-                        "[Podanie - " + Main.serverName + "](https://dev.darsonn.pl/#adm)", true);
+                        "[Podanie - " + Main.config.getServerName() + "](https://dev.darsonn.pl/#adm)", true);
                 break;
             case "applydev":
                 embedBuilder.addField("Niezbędne informacje jakie powinieneś zawrzeć",
@@ -144,7 +144,7 @@ public class EmbedMessageGenerator {
         ticket.sendMessage("Ticket closed by <@"+ member.getId()+">").queue();
 
         embedBuilder.clear();
-        embedBuilder.setTitle(Main.serverName + " Staff Ticket Panel");
+        embedBuilder.setTitle(Main.config.getServerName() + " Staff Ticket Panel");
         embedBuilder.setColor(Color.RED);
 
         ticket.sendMessageEmbeds(embedBuilder.build()).queue();
@@ -197,7 +197,7 @@ public class EmbedMessageGenerator {
 
         embedBuilder.setTitle("Witamy "+member.getEffectiveName()+"!");
         embedBuilder.setColor(Color.GREEN);
-        embedBuilder.setDescription("Witamy na serwerze **" + Main.serverName + "**");
+        embedBuilder.setDescription("Witamy na serwerze **" + Main.config.getServerName() + "**");
         embedBuilder.setTimestamp(Instant.now());
 
         welcomeChannel.sendMessageEmbeds(embedBuilder.build()).queue();
@@ -208,19 +208,19 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " shop informations");
+        embedBuilder.setTitle(Main.config.getServerName() + " shop informations");
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.setDescription("Najważniejsze informacje odnośnie funkcjonowania sklepu");
 
         embedBuilder.addBlankField(false);
 
-        embedBuilder.addField("Znalazłeś produkt, którego szukasz?", "Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i poinformuj nas, że chcesz kupić dostęp do niego.\n" +
+        embedBuilder.addField("Znalazłeś produkt, którego szukasz?", "Utwórz ticket na kanale <#" + Main.config.getTicketChannelID() + "> i poinformuj nas, że chcesz kupić dostęp do niego.\n" +
                 "Po dogadaniu się z płatnością dostaniesz dostęp do prywatnego repozytorium na GitHubie, gdzie będziesz mógł go pobrać" +
                 "i będziesz na bieżąco z aktualizacjami", true);
 
         embedBuilder.addField("Nie ma w sklepie tego czego szukasz?",
-                "To nie problem! Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i napisz czego oczekujesz, a my zajmiemy się resztą.", true);
+                "To nie problem! Utwórz ticket na kanale <#" + Main.config.getTicketChannelID() + "> i napisz czego oczekujesz, a my zajmiemy się resztą.", true);
 
         embedBuilder.addBlankField(false);
 
@@ -228,7 +228,7 @@ public class EmbedMessageGenerator {
                 "To również nie problem! Posiadamy rozbudowaną sekcję poradników, gdzie na kanale <#1145107437414789160>" +
                         " znajdziesz dokładny poradnik jak tego dokonać krok po kroku. \n" +
                         "Jeżeli natomiast będziesz miał jakiś problem pomocy uzyskasz na kanale <#1150189231994589264>." +
-                        " W ostateczności możesz również utworzyć ticket na kanale <#" + Main.ticketChannelID + ">, a **" + Main.serverName +
+                        " W ostateczności możesz również utworzyć ticket na kanale <#" + Main.config.getTicketChannelID() + ">, a **" + Main.config.getServerName() +
                         " Staff** pomoże Ci w rozwiązaniu tego problemu.", true);
 
         embedBuilder.addBlankField(false);
@@ -247,7 +247,7 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " - statusy rekrutacji");
+        embedBuilder.setTitle(Main.config.getServerName() + " - statusy rekrutacji");
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.addBlankField(false);
@@ -310,7 +310,7 @@ public class EmbedMessageGenerator {
             }
         }
 
-        embedBuilder.setTitle("Cennik - " + Main.serverName);
+        embedBuilder.setTitle("Cennik - " + Main.config.getServerName());
         embedBuilder.setDescription("Cennik usług podstawowych");
         embedBuilder.setColor(Color.YELLOW);
 
@@ -322,7 +322,7 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " - WIP");
+        embedBuilder.setTitle(Main.config.getServerName() + " - WIP");
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.setDescription("Ten element nie został jeszcze ukończony.");
@@ -335,7 +335,7 @@ public class EmbedMessageGenerator {
     public void sendRequirements(ButtonInteractionEvent event, String type) {
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " - WIP");
+        embedBuilder.setTitle(Main.config.getServerName() + " - WIP");
         embedBuilder.setColor(Color.YELLOW);
 
         if(type.equals("adm")) {
@@ -369,7 +369,7 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " - Partner informations");
+        embedBuilder.setTitle(Main.config.getServerName() + " - Partner informations");
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.setDescription("Ten element nie został jeszcze ukończony.");

@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import pl.darsonn.discordbot.Main;
+import pl.darsonn.Main;
 import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
 import pl.darsonn.discordbot.ticketsystem.TicketSystemListener;
 
@@ -23,9 +23,9 @@ public class EventHandler extends ListenerAdapter {
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         Member member = event.getMember();
 
-        event.getGuild().addRoleToMember(member, Objects.requireNonNull(event.getJDA().getRoleById(Main.defaultMemberRoleID))).queue();
+        event.getGuild().addRoleToMember(member, Objects.requireNonNull(event.getJDA().getRoleById(Main.config.getDefaultMemberRoleID()))).queue();
 
-        embedMessageGenerator.sendWelcomeMessage(Objects.requireNonNull(event.getGuild().getTextChannelById(Main.welcomeChannelID)), member);
+        embedMessageGenerator.sendWelcomeMessage(Objects.requireNonNull(event.getGuild().getTextChannelById(Main.config.getWelcomeChannelID())), member);
     }
 
     @Override
