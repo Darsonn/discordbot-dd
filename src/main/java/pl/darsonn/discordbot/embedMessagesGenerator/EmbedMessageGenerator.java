@@ -7,7 +7,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
-import pl.darsonn.discordbot.Main;
+import pl.darsonn.Main;
 import pl.darsonn.discordbot.database.DatabaseOperation;
 
 import java.awt.*;
@@ -28,12 +28,12 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName);
+        embedBuilder.setTitle(Main.config.getServerName());
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.addBlankField(false);
 
-        embedBuilder.addField("Zasady ogólne - panujące na serwerze " + Main.serverName,
+        embedBuilder.addField("Zasady ogólne - panujące na serwerze " + Main.config.getServerName(),
                 """
                         1. Szanuj innych użytkowników.
                         2. Zakaz wysyłania treści dla osób pełnoletnich.
@@ -56,7 +56,7 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " Ticket Support");
+        embedBuilder.setTitle(Main.config.getServerName() + " Ticket Support");
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.addField("Przed utworzeniem ticketa!",
@@ -71,7 +71,7 @@ public class EmbedMessageGenerator {
                 .addActionRow(
                         Button.primary("main-open-ticket", "Problem ogólny"),
                         Button.success("shop-open-ticket", "Zamówienie/problem ze sklepem"),
-                        Button.danger("apply-open-ticket", "Aplikuj do " + Main.serverName + " Staff")
+                        Button.danger("apply-open-ticket", "Aplikuj do " + Main.config.getServerName() + " Staff")
                 )
                 .queue();
     }
@@ -91,12 +91,12 @@ public class EmbedMessageGenerator {
     public void sendPanelInTicket(TextChannel ticket, Member member, String ticketType) {
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " Ticket Support");
+        embedBuilder.setTitle(Main.config.getServerName() + " Ticket Support");
         embedBuilder.setColor(Color.YELLOW);
 
         switch (ticketType) {
             case "ticket":
-                embedBuilder.setDescription("Dziękujemy za kontakt z "+ Main.serverName +" Support.\n" +
+                embedBuilder.setDescription("Dziękujemy za kontakt z "+ Main.config.getServerName() +" Support.\n" +
                         "Proszę opisać swój problem i czekać na odpowiedź z naszej strony.");
                 break;
             case "shop":
@@ -113,7 +113,7 @@ public class EmbedMessageGenerator {
                 break;
             case "applyadm":
                 embedBuilder.addField("Podanie na administratora jest dostępne na naszej stronie internetowej pod linkiem:",
-                        "[Podanie - " + Main.serverName + "](https://dev.darsonn.pl/#adm)", true);
+                        "[Podanie - " + Main.config.getServerName() + "](https://dev.darsonn.pl/#adm)", true);
                 break;
             case "applydev":
                 embedBuilder.addField("Niezbędne informacje jakie powinieneś zawrzeć",
@@ -144,7 +144,7 @@ public class EmbedMessageGenerator {
         ticket.sendMessage("Ticket closed by <@"+ member.getId()+">").queue();
 
         embedBuilder.clear();
-        embedBuilder.setTitle(Main.serverName + " Staff Ticket Panel");
+        embedBuilder.setTitle(Main.config.getServerName() + " Staff Ticket Panel");
         embedBuilder.setColor(Color.RED);
 
         ticket.sendMessageEmbeds(embedBuilder.build()).queue();
@@ -197,7 +197,7 @@ public class EmbedMessageGenerator {
 
         embedBuilder.setTitle("Witamy "+member.getEffectiveName()+"!");
         embedBuilder.setColor(Color.GREEN);
-        embedBuilder.setDescription("Witamy na serwerze **" + Main.serverName + "**");
+        embedBuilder.setDescription("Witamy na serwerze **" + Main.config.getServerName() + "**");
         embedBuilder.setTimestamp(Instant.now());
 
         welcomeChannel.sendMessageEmbeds(embedBuilder.build()).queue();
@@ -208,28 +208,36 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " shop informations");
+        embedBuilder.setTitle(Main.config.getServerName() + " shop informations");
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.setDescription("Najważniejsze informacje odnośnie funkcjonowania sklepu");
 
         embedBuilder.addBlankField(false);
 
-        embedBuilder.addField("Znalazłeś skrypt, którego szukasz?", "Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i poinformuj nas, że chcesz kupić dostęp do niego.\n" +
+        embedBuilder.addField("Znalazłeś produkt, którego szukasz?", "Utwórz ticket na kanale <#" + Main.config.getTicketChannelID() + "> i poinformuj nas, że chcesz kupić dostęp do niego.\n" +
                 "Po dogadaniu się z płatnością dostaniesz dostęp do prywatnego repozytorium na GitHubie, gdzie będziesz mógł go pobrać" +
                 "i będziesz na bieżąco z aktualizacjami", true);
 
         embedBuilder.addField("Nie ma w sklepie tego czego szukasz?",
-                "To nie problem! Utwórz ticket na kanale <#" + Main.ticketChannelID + "> i napisz czego oczekujesz od skryptu, a my zajmiemy się resztą.", true);
+                "To nie problem! Utwórz ticket na kanale <#" + Main.config.getTicketChannelID() + "> i napisz czego oczekujesz, a my zajmiemy się resztą.", true);
 
         embedBuilder.addBlankField(false);
 
-        embedBuilder.addField("Nie masz wystarczającej wiedzy jak wgrać skrypt na swój serwer?",
+        embedBuilder.addField("Nie masz wystarczającej wiedzy jak uruchomić oraz skonfigurować bota na swój serwer?",
                 "To również nie problem! Posiadamy rozbudowaną sekcję poradników, gdzie na kanale <#1145107437414789160>" +
-                        " znajdziesz dokładny poradnik jak wgrać skrypt krok po kroku. \n" +
+                        " znajdziesz dokładny poradnik jak tego dokonać krok po kroku. \n" +
                         "Jeżeli natomiast będziesz miał jakiś problem pomocy uzyskasz na kanale <#1150189231994589264>." +
-                        " W ostateczności możesz również utworzyć ticket na kanale <#" + Main.ticketChannelID + ">, a **" + Main.serverName +
+                        " W ostateczności możesz również utworzyć ticket na kanale <#" + Main.config.getTicketChannelID() + ">, a **" + Main.config.getServerName() +
                         " Staff** pomoże Ci w rozwiązaniu tego problemu.", true);
+
+        embedBuilder.addBlankField(false);
+
+        embedBuilder.addField("Zasady gwarancji",
+                "Jako zespół developerski udzielamy wsparcia w przypadku gdy bot będzię zawierał błędy oraz " +
+                        "któraś z wcześniej ustalonych rzeczy nie została uwzględniona i/lub wykonana.", false);
+
+        embedBuilder.addField("Uwaga!", "Pieniędzy za wykonany skrypt **nie** zwracamy!", false);
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
@@ -239,7 +247,7 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " - statusy rekrutacji");
+        embedBuilder.setTitle(Main.config.getServerName() + " - statusy rekrutacji");
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.addBlankField(false);
@@ -259,7 +267,12 @@ public class EmbedMessageGenerator {
                 "<#1145139398204215406>, dalej zostanie przedstawiony cały proces rekrutacyjny w zależności " +
                 "od aplikowanego stanowiska", true);
 
-        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+        textChannel.sendMessageEmbeds(embedBuilder.build())
+                .addActionRow(
+                    Button.success("requirements-adm", "Wymagania na Administratora").asEnabled(),
+                    Button.primary("requirements-dev", "Wymagania na Developera").asEnabled(),
+                    Button.danger("requirements-tworca", "Wymagania na Twórcę").asDisabled()
+                ).queue();
     }
 
     public void sendLinksEmbedMessage(SlashCommandInteractionEvent event) {
@@ -269,7 +282,8 @@ public class EmbedMessageGenerator {
 
         embedBuilder.setTitle("Linki do narzędzi potrzebnych w tej kategorii");
         embedBuilder.setColor(Color.YELLOW);
-        embedBuilder.addField("Programowanie", "- [Visual Studio Code](https://code.visualstudio.com)", true);
+        embedBuilder.addField("Programowanie", "- [Visual Studio Code](https://code.visualstudio.com)\n" +
+                "- [Intellij Idea](https://www.jetbrains.com/idea/)", true);
         embedBuilder.addField("Edycja plików pojazdów itd.", "- [OpenIV](https://openiv.com)", true);
         embedBuilder.addField("Grafika",
                 "- [GIMP](https://www.gimp.org/) (darmowa opcja)" +
@@ -296,7 +310,7 @@ public class EmbedMessageGenerator {
             }
         }
 
-        embedBuilder.setTitle("Cennik - " + Main.serverName);
+        embedBuilder.setTitle("Cennik - " + Main.config.getServerName());
         embedBuilder.setDescription("Cennik usług podstawowych");
         embedBuilder.setColor(Color.YELLOW);
 
@@ -308,7 +322,54 @@ public class EmbedMessageGenerator {
 
         embedBuilder.clear();
 
-        embedBuilder.setTitle(Main.serverName + " - WIP");
+        embedBuilder.setTitle(Main.config.getServerName() + " - WIP");
+        embedBuilder.setColor(Color.YELLOW);
+
+        embedBuilder.setDescription("Ten element nie został jeszcze ukończony.");
+
+        textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
+
+        event.reply("Utworzono wiadomość").setEphemeral(true).queue();
+    }
+
+    public void sendRequirements(ButtonInteractionEvent event, String type) {
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.config.getServerName() + " - WIP");
+        embedBuilder.setColor(Color.YELLOW);
+
+        if(type.equals("adm")) {
+            embedBuilder.addField("Wymagania na stanowisko **Administrator**",
+                    """
+                            Na stanowisko administratora wymagane jest:\s
+                            - min. 16 lat
+                            - doświadczenie na podobnym stanowisku
+                            - czas na sprawdzanie kanałów""", false);
+        } else if (type.equals("dev")) {
+            embedBuilder.addField("Wymagania na stanowisko **Developera**",
+                    """
+                            Na stanowisko developera wymagane jest:\s
+                            - umiejętność tworzenia skryptów/oprogramowania itd. w dziedzinach wymienionych na kanale <#1150859679463915591> lub inne przydatne umiejętności w tematyce serwera
+                            - umiejętność tworzenia kodu z dobrą optymalizacją
+                            - umiejętność pracy zespołowej za pomocą VCS (Git)
+                            """, false);
+        } else if (type.equals("tworca")) {
+            embedBuilder.addField("Wymagania na stanowisko **Twórca**",
+                    "Na stanowisko twórcy wymagane jest: " +
+                            "Work in progress", false);
+        }
+
+        embedBuilder.setDescription(""); //TODO
+
+        event.replyEmbeds(embedBuilder.build()).setEphemeral(true).queue();
+    }
+
+    public void sendPartnerInfo(SlashCommandInteractionEvent event) {
+        TextChannel textChannel = event.getChannel().asTextChannel();
+
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.config.getServerName() + " - Partner informations");
         embedBuilder.setColor(Color.YELLOW);
 
         embedBuilder.setDescription("Ten element nie został jeszcze ukończony.");

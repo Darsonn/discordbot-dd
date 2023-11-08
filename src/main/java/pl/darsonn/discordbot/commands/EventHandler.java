@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import pl.darsonn.discordbot.Main;
+import pl.darsonn.Main;
 import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
 import pl.darsonn.discordbot.ticketsystem.TicketSystemListener;
 
@@ -23,9 +23,9 @@ public class EventHandler extends ListenerAdapter {
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         Member member = event.getMember();
 
-        event.getGuild().addRoleToMember(member, Objects.requireNonNull(event.getJDA().getRoleById(Main.defaultMemberRoleID))).queue();
+        event.getGuild().addRoleToMember(member, Objects.requireNonNull(event.getJDA().getRoleById(Main.config.getDefaultMemberRoleID()))).queue();
 
-        embedMessageGenerator.sendWelcomeMessage(Objects.requireNonNull(event.getGuild().getTextChannelById(Main.welcomeChannelID)), member);
+        embedMessageGenerator.sendWelcomeMessage(Objects.requireNonNull(event.getGuild().getTextChannelById(Main.config.getWelcomeChannelID())), member);
     }
 
     @Override
@@ -41,6 +41,7 @@ public class EventHandler extends ListenerAdapter {
             case "purge" -> purgeCommand(event);
             case "sendpricelist" -> sendPriceListCommand(event);
             case "sendwip" -> embedMessageGenerator.sendWIPEmbedMessage(event);
+            case "sendpartnerinfo" -> sendPartnerInfoCommand(event);
             //case "editstatusofapplication" ->
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
@@ -52,6 +53,12 @@ public class EventHandler extends ListenerAdapter {
 
         if(Objects.requireNonNull(component.getId()).endsWith("-ticket")) {
             ticketSystemListener.interactionListener(event, component);
+        } else if (Objects.requireNonNull(component.getId()).startsWith("requirements")) {
+            switch (component.getId()) {
+                case "requirements-adm" -> embedMessageGenerator.sendRequirements(event, "adm");
+                case "requirements-dev" -> embedMessageGenerator.sendRequirements(event, "dev");
+                case "requirements-tworca" -> embedMessageGenerator.sendRequirements(event, "tworca");
+            }
         } else {
             String[] id = event.getComponentId().split(":");
             String authorId = id[0];
@@ -125,5 +132,10 @@ public class EventHandler extends ListenerAdapter {
     private void sendPriceListCommand(SlashCommandInteractionEvent event) {
         event.reply("Message with price list sent!").setEphemeral(true).queue();
         embedMessageGenerator.sendPriceListEmbedMessage(event);
+    }
+
+    private void sendPartnerInfoCommand(SlashCommandInteractionEvent event) {
+        event.reply("Message with partners info sent!").setEphemeral(true).queue();
+        embedMessageGenerator.sendPartnerInfo(event);
     }
 }

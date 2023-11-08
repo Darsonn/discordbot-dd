@@ -2,6 +2,8 @@ package pl.darsonn.discordbot.ticketsystem;
 
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageHistory;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -9,12 +11,13 @@ import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionE
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.requests.restaction.ChannelAction;
-import pl.darsonn.discordbot.Main;
+import pl.darsonn.Main;
 import pl.darsonn.discordbot.database.DatabaseOperation;
 import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
 
 import java.sql.Timestamp;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Objects;
 
 public class TicketSystemListener extends ListenerAdapter {
@@ -33,7 +36,7 @@ public class TicketSystemListener extends ListenerAdapter {
     }
 
     public void createApplyTicket(StringSelectInteractionEvent event, String option) {
-        Category category = Objects.requireNonNull(event.getGuild()).getCategoryById(Main.ticketSystemCategoryID);
+        Category category = Objects.requireNonNull(event.getGuild()).getCategoryById(Main.config.getTicketSystemCategoryID());
         String textChannel = option + "-"+ Objects.requireNonNull(event.getMember()).getEffectiveName();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -54,7 +57,7 @@ public class TicketSystemListener extends ListenerAdapter {
     }
 
     public void createShopTicket(ButtonInteractionEvent event) {
-        Category category = Objects.requireNonNull(event.getGuild()).getCategoryById(Main.ticketSystemCategoryID);
+        Category category = Objects.requireNonNull(event.getGuild()).getCategoryById(Main.config.getTicketSystemCategoryID());
         String textChannel = "shop-"+ Objects.requireNonNull(event.getMember()).getEffectiveName();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -73,7 +76,7 @@ public class TicketSystemListener extends ListenerAdapter {
     }
 
     public void createTicket(ButtonInteractionEvent event) {
-        Category category = Objects.requireNonNull(event.getGuild()).getCategoryById(Main.ticketSystemCategoryID);
+        Category category = Objects.requireNonNull(event.getGuild()).getCategoryById(Main.config.getTicketSystemCategoryID());
         String textChannel = "ticket-"+ Objects.requireNonNull(event.getMember()).getEffectiveName();
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
@@ -110,6 +113,7 @@ public class TicketSystemListener extends ListenerAdapter {
 
     public void removeTicket(ButtonInteractionEvent event) {
         TextChannel channel = event.getChannel().asTextChannel();
+
         channel.delete().reason("Ticket closed.").queue();
 
         ticketLogs.deleteTicket(Objects.requireNonNull(event.getMember()), channel.getId());

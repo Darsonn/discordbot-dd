@@ -19,7 +19,8 @@ public class DatabaseOperation {
             connection = DriverManager.getConnection(request, "root", "");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DatabaseOperation.class.getName()).log(Level.SEVERE, null, ex);
-            System.exit(-1);
+            System.err.println("Błąd z połączeniem z bazą danych.");
+            System.exit(101);
         }
     }
 
@@ -33,7 +34,7 @@ public class DatabaseOperation {
 
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DatabaseOperation.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Błąd z połączeniem z bazą danych.");
+            System.err.println("Błąd z połączeniem z bazą danych.");
             System.exit(101);
             return null;
         }
