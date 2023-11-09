@@ -139,6 +139,7 @@ public class EventHandler extends ListenerAdapter {
                                         .addOption("Administrator", "administrator")
                                         .addOption("Developer", "developer")
                                         .addOption("Creator", "creator")
+                                        .addOption("None", "none")
                                         .setMaxValues(3)
                                         .build()
                         ).setEphemeral(true).queue();
