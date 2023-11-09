@@ -117,6 +117,10 @@ public class EventHandler extends ListenerAdapter {
                             message += "- Pomyślnie wyczyszczono bazę danych ze śmieci\n";
 //                            event.reply("Pomyślnie wyczyszczono bazę danych ze śmieci").setEphemeral(true).queue();
                         }
+                        case "autoincrement" -> {
+                            Main.databaseOperation.changeAutoIncrement(1);
+                            message += "- Pomyślnie ustawiono wartość autoincrement na " + 1 + "\n";
+                        }
                     }
                 }
                 event.reply(message).setEphemeral(true).queue();
@@ -228,7 +232,8 @@ public class EventHandler extends ListenerAdapter {
                         StringSelectMenu.create("choose-operation-on-database")
                                 .addOption("Check database connection status", "checkconn", "Sprawdza poprawność połączenia z bazą danych")
                                 .addOption("Clear database", "cleardb", "Czyści bazę danych ze zamkniętych ticketów")
-                                .setMaxValues(2)
+                                .addOption("Change autoincrement value", "autoincrement", "Zmienia wartość autoincrement na 1")
+                                .setMaxValues(3)
                                 .build()
                 ).setEphemeral(true).queue();
     }

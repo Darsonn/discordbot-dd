@@ -130,4 +130,15 @@ public class DatabaseOperation {
             e.printStackTrace();
         }
     }
+
+    public void changeAutoIncrement(int value) {
+        String request = "ALTER TABLE tickets AUTO_INCREMENT=?;";
+        try (final var statement = connection.prepareStatement(request)) {
+            statement.setInt(1, value);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Błąd podczas zmiany wartości autoincrement");
+            e.printStackTrace();
+        }
+    }
 }
