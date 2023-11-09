@@ -119,4 +119,15 @@ public class DatabaseOperation {
             e.printStackTrace();
         }
     }
+
+    public void cleanDatabaseFromClosedTickets() {
+        String request = "DELETE FROM `tickets` WHERE `CloserID` != ?;";
+        try (final var statement = connection.prepareStatement(request)) {
+            statement.setInt(1, 0);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Błąd podczas czyszczenia z zamkniętych ticketów bazę danych");
+            e.printStackTrace();
+        }
+    }
 }
