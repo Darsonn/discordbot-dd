@@ -5,5 +5,8 @@
   "welcomeChannelID": "1102953368240005231",
   "defaultMemberRoleID": "1102695755489218662",
   "ticketSystemCategoryID": "1145110724625055757",
-  "ticketChannelID": "1145139398204215406"
+  "ticketChannelID": "1145139398204215406",
+  "changelogRoleID": "1172177312389795840",
+  "discountsRoleID": "1172178910239272960",
+  "changelogChannelID": "1172174525010546829"
 }

@@ -8,6 +8,9 @@ public class Config {
     private String defaultMemberRoleID;
     private String ticketSystemCategoryID;
     private String ticketChannelID;
+    private String changelogRoleID;
+    private String discountsRoleID;
+    private String changelogChannelID;
 
     public String getServerName() {
         return this.serverName;
@@ -15,15 +18,12 @@ public class Config {
     public String getLogoURL() {
         return this.logoURL;
     }
-
     public String getRulesLink() {
         return this.rulesLink;
     }
-
     public String getWelcomeChannelID() {
         return this.welcomeChannelID;
     }
-
     public String getDefaultMemberRoleID() {
         return this.defaultMemberRoleID;
     }
@@ -32,5 +32,14 @@ public class Config {
     }
     public String getTicketChannelID() {
         return this.ticketChannelID;
+    }
+    public String getChangelogRoleID() {
+        return changelogRoleID;
+    }
+    public String getDiscountsRoleID() {
+        return discountsRoleID;
+    }
+    public String getChangelogChannelID() {
+        return changelogChannelID;
     }
 }
