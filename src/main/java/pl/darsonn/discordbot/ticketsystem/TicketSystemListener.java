@@ -42,7 +42,7 @@ public class TicketSystemListener extends ListenerAdapter {
 
         if(event.getJDA().getTextChannelsByName(textChannel, true).isEmpty()) {
             ChannelAction<TextChannel> channelAction = Objects.requireNonNull(category).createTextChannel(textChannel);
-            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null).queue();
+            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null);
             channelAction.queue(channel -> {
                 String channelID = channel.getId();
                 TextChannel ticket = event.getJDA().getTextChannelById(channelID);
@@ -63,7 +63,7 @@ public class TicketSystemListener extends ListenerAdapter {
 
         if(event.getJDA().getTextChannelsByName(textChannel, true).isEmpty()) {
             ChannelAction<TextChannel> channelAction = Objects.requireNonNull(category).createTextChannel(textChannel);
-            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null).queue();
+            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null);
             channelAction.queue(channel -> {
                 String channelID = channel.getId();
                 databaseOperation.createTicket(event.getMember(), "shop", channel, timestamp);
@@ -82,7 +82,7 @@ public class TicketSystemListener extends ListenerAdapter {
 
         if(event.getJDA().getTextChannelsByName(textChannel, true).isEmpty()) {
             ChannelAction<TextChannel> channelAction = Objects.requireNonNull(category).createTextChannel(textChannel);
-            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null).queue();
+            channelAction.addPermissionOverride(event.getMember(), EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND), null);
             channelAction.queue(channel -> {
                 String channelID = channel.getId();
                 databaseOperation.createTicket(event.getMember(), "ticket", channel, timestamp);
