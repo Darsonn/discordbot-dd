@@ -37,6 +37,12 @@ public class CommandsCreator {
                         .setGuildOnly(false)
         );
 
+        commands.addCommands(
+                Commands.slash("databaseoperations", "Operacje na bazie danych")
+                        .setGuildOnly(false)
+                        .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
+        );
+
         commands.queue();
     }
 }
