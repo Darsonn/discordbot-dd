@@ -101,29 +101,27 @@ public class EventHandler extends ListenerAdapter {
             case "choose-message-pricelist" -> embedMessageGenerator.sendPriceListEmbedMessage(event);
             case "choose-open-positions" -> embedMessageGenerator.sendStatusRolesEmbedMessage(event);
             case "choose-operation-on-database" -> {
-                String message = "";
+                StringBuilder message = new StringBuilder();
                 for(int i = 0; i < event.getSelectedOptions().size(); i++) {
                     switch(event.getSelectedOptions().get(i).getValue()) {
                         case "checkconn" -> {
                             if(Main.databaseOperation.getConnection() != null) {
-                                message += "- Połączenie z bazą danych jest bez zarzutów!\n";
-//                                event.reply("Połączenie z bazą danych jest bez zarzutów!").setEphemeral(true).queue();
+                                message.append("- Połączenie z bazą danych jest bez zarzutów!\n");
                             } else {
                                 event.reply("Występuje problem połączenia z bazą danych. **Sprawdź logi!**").setEphemeral(true).queue();
                             }
                         }
                         case "cleardb" -> {
                             Main.databaseOperation.cleanDatabaseFromClosedTickets();
-                            message += "- Pomyślnie wyczyszczono bazę danych ze śmieci\n";
-//                            event.reply("Pomyślnie wyczyszczono bazę danych ze śmieci").setEphemeral(true).queue();
+                            message.append("- Pomyślnie wyczyszczono bazę danych ze śmieci\n");
                         }
                         case "autoincrement" -> {
                             Main.databaseOperation.changeAutoIncrement(1);
-                            message += "- Pomyślnie ustawiono wartość autoincrement na " + 1 + "\n";
+                            message.append("- Pomyślnie ustawiono wartość autoincrement na " + 1 + "\n");
                         }
                     }
                 }
-                event.reply(message).setEphemeral(true).queue();
+                event.reply(message.toString()).setEphemeral(true).queue();
 
             }
         }
