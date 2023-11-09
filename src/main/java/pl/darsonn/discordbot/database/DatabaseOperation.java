@@ -29,7 +29,7 @@ public class DatabaseOperation {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(request, "root", "");
-            System.out.println("Nawiązano połączenie z bazą danych");
+            System.out.println("Połączenie z bazą danych jest poprawne");
             return connection;
 
         } catch (ClassNotFoundException | SQLException ex) {
