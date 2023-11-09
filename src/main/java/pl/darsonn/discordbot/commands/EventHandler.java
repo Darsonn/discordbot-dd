@@ -42,6 +42,7 @@ public class EventHandler extends ListenerAdapter {
             case "sendpricelist" -> sendPriceListCommand(event);
             case "sendwip" -> embedMessageGenerator.sendWIPEmbedMessage(event);
             case "sendpartnerinfo" -> sendPartnerInfoCommand(event);
+            case "invite" -> embedMessageGenerator.sendInviteMessage(event);
             //case "editstatusofapplication" ->
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
