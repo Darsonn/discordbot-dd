@@ -78,6 +78,12 @@ public class CommandsCreator {
                         .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
         );
 
+        commands.addCommands(
+                Commands.slash("invite", "Zaproszenie na serwer")
+                        .setGuildOnly(false)
+                        .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_SEND))
+        );
+
         commands.queue();
     }
 }
