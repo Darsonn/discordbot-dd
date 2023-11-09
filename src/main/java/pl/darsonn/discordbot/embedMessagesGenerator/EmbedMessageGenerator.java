@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import pl.darsonn.Main;
@@ -242,8 +243,15 @@ public class EmbedMessageGenerator {
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
 
-    public void sendStatusRolesEmbedMessage(SlashCommandInteractionEvent event, boolean isAdm, boolean isDev, boolean isCreator) {
+    public void sendStatusRolesEmbedMessage(StringSelectInteractionEvent event) {
+        boolean isAdm = false, isDev = false, isCreator = false;
         TextChannel textChannel = event.getChannel().asTextChannel();
+
+        for (var element : event.getSelectedOptions()) {
+            if(element.getValue().equals("administrator")) isAdm = true;
+            if(element.getValue().equals("developer")) isDev = true;
+            if(element.getValue().equals("creator")) isCreator = true;
+        }
 
         embedBuilder.clear();
 
@@ -273,6 +281,8 @@ public class EmbedMessageGenerator {
                     Button.primary("requirements-dev", "Wymagania na Developera").asEnabled(),
                     Button.danger("requirements-tworca", "Wymagania na Twórcę").asDisabled()
                 ).queue();
+
+        event.reply("Message sent!").setEphemeral(true).queue();
     }
 
     public void sendLinksEmbedMessage(SlashCommandInteractionEvent event) {
@@ -292,9 +302,9 @@ public class EmbedMessageGenerator {
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
 
-    public void sendPriceListEmbedMessage(SlashCommandInteractionEvent event) {
+    public void sendPriceListEmbedMessage(StringSelectInteractionEvent event) {
         TextChannel textChannel = event.getChannel().asTextChannel();
-        String option = Objects.requireNonNull(event.getOption("type")).getAsString();
+        String option = Objects.requireNonNull(event.getValues().get(0));
 
         embedBuilder.clear();
 
@@ -313,6 +323,8 @@ public class EmbedMessageGenerator {
         embedBuilder.setTitle("Cennik - " + Main.config.getServerName());
         embedBuilder.setDescription("Cennik usług podstawowych");
         embedBuilder.setColor(Color.YELLOW);
+
+        event.reply("Message sent!").setEphemeral(true).queue();
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
     }
@@ -375,8 +387,6 @@ public class EmbedMessageGenerator {
         embedBuilder.setDescription("Ten element nie został jeszcze ukończony.");
 
         textChannel.sendMessageEmbeds(embedBuilder.build()).queue();
-
-        event.reply("Utworzono wiadomość").setEphemeral(true).queue();
     }
 
     public void sendInviteMessage(SlashCommandInteractionEvent event) {

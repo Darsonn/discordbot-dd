@@ -3,21 +3,27 @@ package pl.darsonn.discordbot.commands;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
+import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.StringSelectInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
+import net.dv8tion.jda.api.interactions.components.selections.StringSelectMenu;
 import pl.darsonn.Main;
 import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
 import pl.darsonn.discordbot.ticketsystem.TicketSystemListener;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 public class EventHandler extends ListenerAdapter {
     EmbedMessageGenerator embedMessageGenerator = new EmbedMessageGenerator();
     TicketSystemListener ticketSystemListener = new TicketSystemListener();
+    private String[] systems = new String[] {"Rules", "Tickets", "Shop Info", "Status roles", "Links", "Price List", "WIP", "Partner Informations"};
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
@@ -33,17 +39,9 @@ public class EventHandler extends ListenerAdapter {
         if (event.getGuild() == null) return;
 
         switch (event.getName()) {
-            case "sendrules" -> sendRulesCommand(event);
-            case "setupticket" -> setupTicketCommand(event);
-            case "sendshopinfo" -> sendShopInfoCommand(event);
-            case "sendstatusroles" -> sendStatusRolesCommand(event);
-            case "sendlinkmessage" -> sendLinksMessageCommand(event);
             case "purge" -> purgeCommand(event);
-            case "sendpricelist" -> sendPriceListCommand(event);
-            case "sendwip" -> embedMessageGenerator.sendWIPEmbedMessage(event);
-            case "sendpartnerinfo" -> sendPartnerInfoCommand(event);
             case "invite" -> embedMessageGenerator.sendInviteMessage(event);
-            //case "editstatusofapplication" ->
+            case "setup" -> setupCommand(event);
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
     }
@@ -89,32 +87,22 @@ public class EventHandler extends ListenerAdapter {
         if(event.getComponentId().equals("applyoption")) {
             ticketSystemListener.createApplyTicket(event, event.getValues().get(0));
         }
+        switch(event.getComponentId()) {
+            case "applyoption" -> ticketSystemListener.createApplyTicket(event, event.getValues().get(0));
+            case "choose-message-pricelist" -> embedMessageGenerator.sendPriceListEmbedMessage(event);
+            case "choose-open-positions" -> embedMessageGenerator.sendStatusRolesEmbedMessage(event);
+        }
     }
 
-    public void sendRulesCommand(SlashCommandInteractionEvent event) {
-        event.reply("Rules embed message sent!").setEphemeral(true).queue();
-        embedMessageGenerator.sendRulesEmbedMessage(event);
-    }
-
-    public void setupTicketCommand(SlashCommandInteractionEvent event) {
-        event.reply("Ticket panel has been created!").setEphemeral(true).queue();
-        embedMessageGenerator.sendTicketPanelEmbedMessage(event);
-    }
-
-    private void sendShopInfoCommand(SlashCommandInteractionEvent event) {
-        event.reply("Shop embed message sent!").setEphemeral(true).queue();
-        embedMessageGenerator.sendShopEmbedMessage(event);
-    }
-
-    private void sendStatusRolesCommand(SlashCommandInteractionEvent event) {
-        event.reply("Message with roles status sent!").setEphemeral(true).queue();
-        embedMessageGenerator.sendStatusRolesEmbedMessage(event, Objects.requireNonNull(event.getOption("administrator")).getAsBoolean(),
-                Objects.requireNonNull(event.getOption("developer")).getAsBoolean(), Objects.requireNonNull(event.getOption("creator")).getAsBoolean());
-    }
-
-    private void sendLinksMessageCommand(SlashCommandInteractionEvent event) {
-        event.reply("Message with links sent!").setEphemeral(true).queue();
-        embedMessageGenerator.sendLinksEmbedMessage(event);
+    @Override
+    public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event) {
+        if(event.getName().equals("setup") && event.getFocusedOption().getName().equals("setup")) {
+            List<Command.Choice> options = Stream.of(systems)
+                    .filter(word -> word.startsWith(event.getFocusedOption().getValue()))
+                    .map(word -> new Command.Choice(word, word))
+                    .toList();
+            event.replyChoices(options).queue();
+        }
     }
 
     private void purgeCommand(SlashCommandInteractionEvent event) {
@@ -130,13 +118,50 @@ public class EventHandler extends ListenerAdapter {
                 .queue();
     }
 
-    private void sendPriceListCommand(SlashCommandInteractionEvent event) {
-        event.reply("Message with price list sent!").setEphemeral(true).queue();
-        embedMessageGenerator.sendPriceListEmbedMessage(event);
-    }
-
-    private void sendPartnerInfoCommand(SlashCommandInteractionEvent event) {
-        event.reply("Message with partners info sent!").setEphemeral(true).queue();
-        embedMessageGenerator.sendPartnerInfo(event);
+    private void setupCommand(SlashCommandInteractionEvent event) {
+        switch(Objects.requireNonNull(event.getOption("setup")).getAsString().toLowerCase()) {
+            case "rules" -> {
+                event.reply("Rules embed message sent!").setEphemeral(true).queue();
+                embedMessageGenerator.sendRulesEmbedMessage(event);
+            }
+            case "tickets" -> {
+                event.reply("Ticket panel has been created!").setEphemeral(true).queue();
+                embedMessageGenerator.sendTicketPanelEmbedMessage(event);
+            }
+            case "shop info" -> {
+                event.reply("Shop embed message sent!").setEphemeral(true).queue();
+                embedMessageGenerator.sendShopEmbedMessage(event);
+            }
+            case "status roles" -> {
+                event.reply("Choose open positions")
+                        .addActionRow(
+                                StringSelectMenu.create("choose-open-positions")
+                                        .addOption("Administrator", "administrator")
+                                        .addOption("Developer", "developer")
+                                        .addOption("Creator", "creator")
+                                        .setMaxValues(3)
+                                        .build()
+                        ).setEphemeral(true).queue();
+            }
+            case "links" -> {
+                event.reply("Message with links sent!").setEphemeral(true).queue();
+                embedMessageGenerator.sendLinksEmbedMessage(event);
+            }
+            case "price list" -> {
+                event.reply("Choose type")
+                        .addActionRow(
+                                StringSelectMenu.create("choose-message-pricelist")
+                                        .addOption("Fivem", "fivem", "Send message with Fivem price list")
+                                        .addOption("Discord bot", "dcbot", "Send message with Discord bot price list")
+                                        .addOption("Korepetycje", "korepetycje", "Send message with private lessons price list")
+                                        .build()
+                        ).setEphemeral(true).queue();
+            }
+            case "wip" -> embedMessageGenerator.sendWIPEmbedMessage(event);
+            case "partner informations" -> {
+                event.reply("Message with partners info sent!").setEphemeral(true).queue();
+                embedMessageGenerator.sendPartnerInfo(event);
+            }
+        }
     }
 }
