@@ -18,6 +18,7 @@ import pl.darsonn.Main;
 import pl.darsonn.discordbot.embedMessagesGenerator.EmbedMessageGenerator;
 import pl.darsonn.discordbot.ticketsystem.TicketSystemListener;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -61,8 +62,10 @@ public class EventHandler extends ListenerAdapter {
                 case "requirements-dev" -> embedMessageGenerator.sendRequirements(event, "dev");
                 case "requirements-tworca" -> embedMessageGenerator.sendRequirements(event, "tworca");
             }
-        } else if(component.getId().equals("accept-sending-changelog")) {
-
+        } else if(component.getId().equals("getInformationsChangelog")) {
+            event.reply("(+) - oznacza dodanie nowych funkcjonalności\n" +
+                    "(-) - oznacza usunięcie funkcjonalności\n" +
+                    "(/) - oznacza poprawienie/zmianę funkcjonalności").setEphemeral(true).queue();
         } else {
             String[] id = event.getComponentId().split(":");
             String authorId = id[0];
@@ -126,20 +129,26 @@ public class EventHandler extends ListenerAdapter {
     private void changelogCommand(SlashCommandInteractionEvent event) {
         TextChannel textChannel = Objects.requireNonNull(event.getGuild()).getTextChannelById(Main.config.getChangelogChannelID());
 
-        event.getChannel().getHistory().retrievePast(1)
-                .map(messages -> messages.get(0))
-                .queue(message -> {
-                    if(!message.getAuthor().isBot()) {
-                        Objects.requireNonNull(textChannel).sendMessage("<@&" + Main.config.getChangelogRoleID() + ">\n\n" + message.getContentRaw())
-                                .addActionRow(
-                                        Button.success("getInformationsChangelog", "Show informations about changelogs symbols meaning")
-                                )
-                                .queue();
-                        event.reply("Wysłano wiadomość na <#" + Main.config.getChangelogChannelID() + ">!").setEphemeral(true).queue();
-                    } else {
-                        event.reply("Błąd! Nie znaleziono wiadomości do wysłania.").setEphemeral(true).queue();
-                    }
-                });
+        if(event.getMember().getRoles().contains(event.getGuild().getRoleById(Main.config.getDevTeamRoleID()))) {
+            event.getChannel().getHistory().retrievePast(1)
+                    .map(messages -> messages.get(0))
+                    .queue(message -> {
+                        if(!message.getAuthor().isBot()) {
+                            Objects.requireNonNull(textChannel).sendMessage(Objects.requireNonNull(event.getJDA().getRoleById(Main.config.getChangelogRoleID())).getAsMention() + "\n\n" + message.getContentRaw())
+                                    .setAllowedMentions(EnumSet.of(Message.MentionType.ROLE))
+                                    .mentionRoles(Objects.requireNonNull(event.getJDA().getRoleById(Main.config.getChangelogRoleID())).getId())
+                                    .addActionRow(
+                                            Button.success("getInformationsChangelog", "Show informations about changelogs symbols meaning")
+                                    )
+                                    .queue();
+                            event.reply("Wysłano wiadomość na <#" + Main.config.getChangelogChannelID() + ">!").setEphemeral(true).queue();
+                        } else {
+                            event.reply("Błąd! Nie znaleziono wiadomości do wysłania.").setEphemeral(true).queue();
+                        }
+                    });
+        } else {
+            event.reply("Nie posiadasz wymaganych permisji, aby wywołać to polecenie!").setEphemeral(true).queue();
+        }
     }
 
     private void setupCommand(SlashCommandInteractionEvent event) {
