@@ -11,6 +11,7 @@ public class Config {
     private String changelogRoleID;
     private String discountsRoleID;
     private String changelogChannelID;
+    private String devTeamRoleID;
 
     public String getServerName() {
         return this.serverName;
@@ -41,5 +42,8 @@ public class Config {
     }
     public String getChangelogChannelID() {
         return changelogChannelID;
+    }
+    public String getDevTeamRoleID() {
+        return devTeamRoleID;
     }
 }
