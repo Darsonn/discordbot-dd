@@ -11,6 +11,7 @@ import java.io.InputStream;
 
 public class Main {
     public static Config config;
+    public static DatabaseOperation databaseOperation;
 
     public static void main(String[] args) {
         loadConfig();
@@ -22,7 +23,7 @@ public class Main {
             System.err.println("Błędny token");
         }
 
-        DatabaseOperation databaseOperation = new DatabaseOperation();
+        databaseOperation = new DatabaseOperation();
         databaseOperation.getConnection();
     }
 
