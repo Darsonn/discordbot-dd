@@ -32,6 +32,11 @@ public class CommandsCreator {
                         .addOption(STRING, "setup", "Wybierz system", true, true)
         );
 
+        commands.addCommands(
+                Commands.slash("changelog", "Wysyła wiadomość z nowościami na kanale changelog")
+                        .setGuildOnly(false)
+        );
+
         commands.queue();
     }
 }

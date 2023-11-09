@@ -1,6 +1,8 @@
 package pl.darsonn.discordbot.commands;
 
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -42,6 +44,7 @@ public class EventHandler extends ListenerAdapter {
             case "purge" -> purgeCommand(event);
             case "invite" -> embedMessageGenerator.sendInviteMessage(event);
             case "setup" -> setupCommand(event);
+            case "changelog" -> changelogCommand(event);
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
     }
@@ -52,12 +55,14 @@ public class EventHandler extends ListenerAdapter {
 
         if(Objects.requireNonNull(component.getId()).endsWith("-ticket")) {
             ticketSystemListener.interactionListener(event, component);
-        } else if (Objects.requireNonNull(component.getId()).startsWith("requirements")) {
+        } else if(Objects.requireNonNull(component.getId()).startsWith("requirements")) {
             switch (component.getId()) {
                 case "requirements-adm" -> embedMessageGenerator.sendRequirements(event, "adm");
                 case "requirements-dev" -> embedMessageGenerator.sendRequirements(event, "dev");
                 case "requirements-tworca" -> embedMessageGenerator.sendRequirements(event, "tworca");
             }
+        } else if(component.getId().equals("accept-sending-changelog")) {
+
         } else {
             String[] id = event.getComponentId().split(":");
             String authorId = id[0];
@@ -116,6 +121,25 @@ public class EventHandler extends ListenerAdapter {
                         Button.secondary(userId + ":delete", "Rezygnuję"),
                         Button.danger(userId + ":prune:" + amount, "Tak"))
                 .queue();
+    }
+
+    private void changelogCommand(SlashCommandInteractionEvent event) {
+        TextChannel textChannel = Objects.requireNonNull(event.getGuild()).getTextChannelById(Main.config.getChangelogChannelID());
+
+        event.getChannel().getHistory().retrievePast(1)
+                .map(messages -> messages.get(0))
+                .queue(message -> {
+                    if(!message.getAuthor().isBot()) {
+                        Objects.requireNonNull(textChannel).sendMessage("<@&" + Main.config.getChangelogRoleID() + ">\n\n" + message.getContentRaw())
+                                .addActionRow(
+                                        Button.success("getInformationsChangelog", "Show informations about changelogs symbols meaning")
+                                )
+                                .queue();
+                        event.reply("Wysłano wiadomość na <#" + Main.config.getChangelogChannelID() + ">!").setEphemeral(true).queue();
+                    } else {
+                        event.reply("Błąd! Nie znaleziono wiadomości do wysłania.").setEphemeral(true).queue();
+                    }
+                });
     }
 
     private void setupCommand(SlashCommandInteractionEvent event) {
