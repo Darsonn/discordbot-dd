@@ -247,6 +247,13 @@ public class EmbedMessageGenerator {
         boolean isAdm = false, isDev = false, isCreator = false;
         TextChannel textChannel = event.getChannel().asTextChannel();
 
+        textChannel.getHistory().retrievePast(2)
+                .map(messages -> messages.get(0))
+                .queue(message -> {
+                    System.out.println(message.getContentRaw());
+                    if(message.getAuthor().isBot()) message.delete().queue();
+                });
+
         for (var element : event.getSelectedOptions()) {
             if(element.getValue().equals("administrator")) isAdm = true;
             if(element.getValue().equals("developer")) isDev = true;
@@ -277,9 +284,9 @@ public class EmbedMessageGenerator {
 
         textChannel.sendMessageEmbeds(embedBuilder.build())
                 .addActionRow(
-                    Button.success("requirements-adm", "Wymagania na Administratora").asEnabled(),
-                    Button.primary("requirements-dev", "Wymagania na Developera").asEnabled(),
-                    Button.danger("requirements-tworca", "Wymagania na Twórcę").asDisabled()
+                        isAdm ? Button.success("requirements-adm", "Wymagania na Administratora").asEnabled() : Button.success("requirements-adm", "Wymagania na Administratora").asDisabled(),
+                        isDev ? Button.primary("requirements-dev", "Wymagania na Developera").asEnabled() : Button.primary("requirements-dev", "Wymagania na Developera").asDisabled(),
+                        isCreator ? Button.danger("requirements-tworca", "Wymagania na Twórcę").asEnabled() : Button.danger("requirements-tworca", "Wymagania na Twórcę").asDisabled()
                 ).queue();
 
         event.reply("Message sent!").setEphemeral(true).queue();
