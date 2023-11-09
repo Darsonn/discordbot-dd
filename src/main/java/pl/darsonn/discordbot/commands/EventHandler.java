@@ -101,10 +101,26 @@ public class EventHandler extends ListenerAdapter {
             case "choose-message-pricelist" -> embedMessageGenerator.sendPriceListEmbedMessage(event);
             case "choose-open-positions" -> embedMessageGenerator.sendStatusRolesEmbedMessage(event);
             case "choose-operation-on-database" -> {
-                if(Objects.equals(event.getSelectedOptions().get(0).getValue(), "cleardb")) {
-                    Main.databaseOperation.cleanDatabaseFromClosedTickets();
-                    event.reply("Pomyślnie wyczyszczono bazę danych ze śmieci").setEphemeral(true).queue();
+                String message = "";
+                for(int i = 0; i < event.getSelectedOptions().size(); i++) {
+                    switch(event.getSelectedOptions().get(i).getValue()) {
+                        case "checkconn" -> {
+                            if(Main.databaseOperation.getConnection() != null) {
+                                message += "- Połączenie z bazą danych jest bez zarzutów!\n";
+//                                event.reply("Połączenie z bazą danych jest bez zarzutów!").setEphemeral(true).queue();
+                            } else {
+                                event.reply("Występuje problem połączenia z bazą danych. **Sprawdź logi!**").setEphemeral(true).queue();
+                            }
+                        }
+                        case "cleardb" -> {
+                            Main.databaseOperation.cleanDatabaseFromClosedTickets();
+                            message += "- Pomyślnie wyczyszczono bazę danych ze śmieci\n";
+//                            event.reply("Pomyślnie wyczyszczono bazę danych ze śmieci").setEphemeral(true).queue();
+                        }
+                    }
                 }
+                event.reply(message).setEphemeral(true).queue();
+
             }
         }
     }
@@ -210,7 +226,9 @@ public class EventHandler extends ListenerAdapter {
         event.reply("Choose operation")
                 .addActionRow(
                         StringSelectMenu.create("choose-operation-on-database")
+                                .addOption("Check database connection status", "checkconn", "Sprawdza poprawność połączenia z bazą danych")
                                 .addOption("Clear database", "cleardb", "Czyści bazę danych ze zamkniętych ticketów")
+                                .setMaxValues(2)
                                 .build()
                 ).setEphemeral(true).queue();
     }
