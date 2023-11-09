@@ -378,4 +378,14 @@ public class EmbedMessageGenerator {
 
         event.reply("Utworzono wiadomość").setEphemeral(true).queue();
     }
+
+    public void sendInviteMessage(SlashCommandInteractionEvent event) {
+        embedBuilder.clear();
+
+        embedBuilder.setTitle(Main.config.getServerName() + " - Invite Link");
+        embedBuilder.setColor(Color.YELLOW);
+        embedBuilder.setDescription("https://discord.darsonn.pl/ \n(currently not available)");
+
+        event.replyEmbeds(embedBuilder.build()).queue();
+    }
 }
