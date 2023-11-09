@@ -46,6 +46,7 @@ public class EventHandler extends ListenerAdapter {
             case "invite" -> embedMessageGenerator.sendInviteMessage(event);
             case "setup" -> setupCommand(event);
             case "changelog" -> changelogCommand(event);
+            case "databaseoperations" -> databaseOperationsCommand(event);
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
     }
@@ -99,6 +100,12 @@ public class EventHandler extends ListenerAdapter {
             case "applyoption" -> ticketSystemListener.createApplyTicket(event, event.getValues().get(0));
             case "choose-message-pricelist" -> embedMessageGenerator.sendPriceListEmbedMessage(event);
             case "choose-open-positions" -> embedMessageGenerator.sendStatusRolesEmbedMessage(event);
+            case "choose-operation-on-database" -> {
+                if(Objects.equals(event.getSelectedOptions().get(0).getValue(), "cleardb")) {
+                    Main.databaseOperation.cleanDatabaseFromClosedTickets();
+                    event.reply("Pomyślnie wyczyszczono bazę danych ze śmieci").setEphemeral(true).queue();
+                }
+            }
         }
     }
 
@@ -197,5 +204,14 @@ public class EventHandler extends ListenerAdapter {
                 embedMessageGenerator.sendPartnerInfo(event);
             }
         }
+    }
+
+    private void databaseOperationsCommand(SlashCommandInteractionEvent event) {
+        event.reply("Choose operation")
+                .addActionRow(
+                        StringSelectMenu.create("choose-operation-on-database")
+                                .addOption("Clear database", "cleardb", "Czyści bazę danych ze zamkniętych ticketów")
+                                .build()
+                ).setEphemeral(true).queue();
     }
 }
