@@ -43,6 +43,12 @@ public class CommandsCreator {
                         .setDefaultPermissions(DefaultMemberPermissions.DISABLED)
         );
 
+        commands.addCommands(
+                Commands.slash("status", "Sprawdź status bota")
+                        .setGuildOnly(false)
+                        .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.MESSAGE_SEND))
+        );
+
         commands.queue();
     }
 }
