@@ -20,7 +20,7 @@ public class Main {
             DiscordBot discordBot = new DiscordBot();
             discordBot.startBot(args[0]);
         } catch (InvalidTokenException exception) {
-            System.err.println("Błędny token");
+            Logs.error("Invalid bot token");
         }
 
         databaseOperation = new DatabaseOperation();
@@ -32,9 +32,10 @@ public class Main {
         try {
             InputStream inputStream = Main.class.getClassLoader().getResourceAsStream("config.json");
             config = objectMapper.readValue(inputStream, Config.class);
+            Logs.information("Config loaded properly");
         } catch (IOException e) {
-            System.err.println("Plik konfiguracyjny nie istnieje lub źle został zdefiniowany.");
-            throw new RuntimeException(e);
+            Logs.error("There was error while loading config");
+            System.exit(101);
         }
     }
 }
