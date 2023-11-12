@@ -2,6 +2,7 @@ package pl.darsonn.discordbot.database;
 
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import pl.darsonn.Logs;
 
 import java.sql.*;
 import java.util.logging.Level;
@@ -19,7 +20,7 @@ public class DatabaseOperation {
             connection = DriverManager.getConnection(request, "root", "");
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DatabaseOperation.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("Błąd z połączeniem z bazą danych.");
+            Logs.error("Błąd z połączeniem z bazą danych.");
             System.exit(101);
         }
     }
@@ -29,12 +30,12 @@ public class DatabaseOperation {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(request, "root", "");
-            System.out.println("Połączenie z bazą danych jest poprawne");
+            Logs.information("Połączenie z bazą danych jest poprawne");
             return connection;
 
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DatabaseOperation.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println("Błąd z połączeniem z bazą danych.");
+            Logs.error("Błąd z połączeniem z bazą danych.");
             System.exit(101);
             return null;
         }
@@ -54,7 +55,7 @@ public class DatabaseOperation {
             statement.setString(9, channel.getId());
             statement.execute();
         } catch (SQLException e) {
-            System.err.println("Błąd podczas wprowadzania nowego ticketa do bazy danych");
+            Logs.error("Błąd podczas wprowadzania nowego ticketa do bazy danych");
             e.printStackTrace();
         }
     }
@@ -75,7 +76,7 @@ public class DatabaseOperation {
             }
             return ticketCreateDate;
         } catch (SQLException e) {
-            System.err.println("Błąd podczas odczytu daty utworzenia ticketa z bazy danych");
+            Logs.error("Błąd podczas odczytu daty utworzenia ticketa z bazy danych");
             e.printStackTrace();
             return null;
         }
@@ -92,7 +93,7 @@ public class DatabaseOperation {
             }
             return ticketOpener;
         } catch (SQLException e) {
-            System.err.println("Błąd podczas odczytu właściciela ticketa z bazy danych");
+            Logs.error("Błąd podczas odczytu właściciela ticketa z bazy danych");
             e.printStackTrace();
             return null;
         }
@@ -104,7 +105,7 @@ public class DatabaseOperation {
             statement.setString(1, ticketCloserID);
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Błąd podczas edytowania ticketa po zamknięciu w bazie danych");
+            Logs.error("Błąd podczas edytowania ticketa po zamknięciu w bazie danych");
             e.printStackTrace();
         }
     }
@@ -115,7 +116,7 @@ public class DatabaseOperation {
             statement.setTimestamp(1, timestamp);
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Błąd podczas edytowania ticketa po zamknięciu w bazie danych");
+            Logs.error("Błąd podczas edytowania ticketa po zamknięciu w bazie danych");
             e.printStackTrace();
         }
     }
@@ -126,7 +127,7 @@ public class DatabaseOperation {
             statement.setInt(1, 0);
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Błąd podczas czyszczenia z zamkniętych ticketów bazę danych");
+            Logs.error("Błąd podczas czyszczenia z zamkniętych ticketów bazę danych");
             e.printStackTrace();
         }
     }
@@ -137,7 +138,7 @@ public class DatabaseOperation {
             statement.setInt(1, value);
             statement.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Błąd podczas zmiany wartości autoincrement");
+            Logs.error("Błąd podczas zmiany wartości autoincrement");
             e.printStackTrace();
         }
     }
