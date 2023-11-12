@@ -405,4 +405,18 @@ public class EmbedMessageGenerator {
 
         event.replyEmbeds(embedBuilder.build()).queue();
     }
+
+    public void sendStatusEmbedMessage(SlashCommandInteractionEvent event, long ping, boolean databaseStatus) {
+        embedBuilder.clear();
+
+        embedBuilder.setTitle("Status bota " + Main.config.getServerName());
+        embedBuilder.setColor(Color.YELLOW);
+
+        embedBuilder.addField("Opóźnienie bota (PING): ", String.valueOf(ping), false);
+        embedBuilder.addField("Status połączenia z bazą danych: ",
+                databaseStatus? "Poprawne" : "Błędne",
+                false);
+
+        event.replyEmbeds(embedBuilder.build()).queue();
+    }
 }

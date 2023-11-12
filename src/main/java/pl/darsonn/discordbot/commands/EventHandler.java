@@ -47,6 +47,7 @@ public class EventHandler extends ListenerAdapter {
             case "setup" -> setupCommand(event);
             case "changelog" -> changelogCommand(event);
             case "databaseoperations" -> databaseOperationsCommand(event);
+            case "status" -> statusCommand(event);
             default -> event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
     }
@@ -234,5 +235,13 @@ public class EventHandler extends ListenerAdapter {
                                 .setMaxValues(3)
                                 .build()
                 ).setEphemeral(true).queue();
+    }
+
+    private void statusCommand(SlashCommandInteractionEvent event) {
+        embedMessageGenerator.sendStatusEmbedMessage(
+                event,
+                event.getJDA().getGatewayPing(),
+                Main.databaseOperation.getConnection() != null
+        );
     }
 }
